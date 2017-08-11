@@ -2,7 +2,7 @@
 using System.Data;
 using System.Text;
 using System.Data.SqlClient;
-using Raysoft.DBUtility;//Please add references
+using Ray.Framework.DBUtility;//Please add references
 
 namespace Ferrero.DAL
 {
@@ -263,7 +263,7 @@ namespace Ferrero.DAL
                 parameters[114].Value = model.FEntrySelfB0163;
                 parameters[115].Value = model.FEntrySelfB0159;
 
-                int rows = SqlHelper.ExecuteSql(SqlHelper.getConnectionString(sConnectionName), strSql.ToString(), parameters);
+                int rows = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnectionString(sConnectionName),CommandType.Text, strSql.ToString(), parameters);
                 if (rows > 0)
                 {
                     return true;
@@ -481,7 +481,7 @@ namespace Ferrero.DAL
                 parameters[98].Value = 0;
 
 
-                int rows = SqlHelper.ExecuteSql(SqlHelper.getConnectionString(sConnectionName), strSql.ToString(), parameters);
+                int rows = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnectionString(sConnectionName), CommandType.Text, strSql.ToString(), parameters);
                 if (rows > 0)
                 {
                     return true;
@@ -508,7 +508,7 @@ namespace Ferrero.DAL
         //    parameters[0].Value = FDetailID;
 
         //    Ferrero.Model.ICStockBillEntry model = new Ferrero.Model.ICStockBillEntry();
-        //    DataSet ds = SqlHelper.Query(SqlHelper.getConnectionString(sConnectionName), strSql.ToString(), parameters);
+        //    DataSet ds = SqlHelper.ExecuteDataSet(SqlHelper.GetConnectionString(sConnectionName), strSql.ToString(), parameters);
         //    if (ds.Tables[0].Rows.Count > 0)
         //    {
         //        return DataRowToModel(ds.Tables[0].Rows[0]);
@@ -1012,7 +1012,7 @@ namespace Ferrero.DAL
         //    {
         //        strSql.Append(" where " + strWhere);
         //    }
-        //    return SqlHelper.Query(SqlHelper.getConnectionString(sConnectionName), strSql.ToString());
+        //    return SqlHelper.ExecuteDataSet(SqlHelper.GetConnectionString(sConnectionName), strSql.ToString());
         //}
 
         ///// <summary>
@@ -1033,7 +1033,7 @@ namespace Ferrero.DAL
         //        strSql.Append(" where " + strWhere);
         //    }
         //    strSql.Append(" order by " + filedOrder);
-        //    return SqlHelper.Query(SqlHelper.getConnectionString(sConnectionName), strSql.ToString());
+        //    return SqlHelper.ExecuteDataSet(SqlHelper.GetConnectionString(sConnectionName), strSql.ToString());
         //}
 
         ///// <summary>
@@ -1047,7 +1047,7 @@ namespace Ferrero.DAL
         //    {
         //        strSql.Append(" where " + strWhere);
         //    }
-        //    object obj = SqlHelper.GetSingle(SqlHelper.getConnectionString(sConnectionName), strSql.ToString());
+        //    object obj = SqlHelper.GetSingle(SqlHelper.GetConnectionString(sConnectionName), strSql.ToString());
         //    if (obj == null)
         //    {
         //        return 0;
@@ -1080,7 +1080,7 @@ namespace Ferrero.DAL
         //    }
         //    strSql.Append(" ) TT");
         //    strSql.AppendFormat(" WHERE TT.Row between {0} and {1}", startIndex, endIndex);
-        //    return SqlHelper.Query(SqlHelper.getConnectionString(sConnectionName), strSql.ToString());
+        //    return SqlHelper.ExecuteDataSet(SqlHelper.GetConnectionString(sConnectionName), strSql.ToString());
         //}
 
         /*
@@ -1123,7 +1123,7 @@ namespace Ferrero.DAL
             //string connectionString = EncryptHelper.Decrypt("77052300", ConfigurationManager.ConnectionStrings[connectionName].ConnectionString);
             StringBuilder strSql = new StringBuilder();
             strSql.Append(String.Format(" select fItemID from t_ICItemCore Where fNumber = '{0}' ", fNumber));
-            object obj = SqlHelper.ExecuteScalar(SqlHelper.getConnectionString(connectionName), CommandType.Text, strSql.ToString(), null);
+            object obj = SqlHelper.ExecuteScalar(SqlHelper.GetConnectionString(connectionName), CommandType.Text, strSql.ToString(), null);
             if (obj == null)
             {
                 return 0;
@@ -1145,7 +1145,7 @@ namespace Ferrero.DAL
             //string connectionString = EncryptHelper.Decrypt("77052300", ConfigurationManager.ConnectionStrings[connectionName].ConnectionString);
             StringBuilder strSql = new StringBuilder();
             strSql.Append(String.Format(" select fItemID from t_MeasureUnit Where FName = '{0}' ", fName));
-            object obj = SqlHelper.ExecuteScalar(SqlHelper.getConnectionString(connectionName), CommandType.Text, strSql.ToString(), null);
+            object obj = SqlHelper.ExecuteScalar(SqlHelper.GetConnectionString(connectionName), CommandType.Text, strSql.ToString(), null);
             if (obj == null)
             {
                 return 0;
@@ -1167,7 +1167,7 @@ namespace Ferrero.DAL
             //string connectionString = EncryptHelper.Decrypt("77052300", ConfigurationManager.ConnectionStrings[connectionName].ConnectionString);
             StringBuilder strSql = new StringBuilder();
             strSql.Append(String.Format(" select fItemID from t_item Where FNumber = '{0}' ", fNumber));
-            object obj = SqlHelper.ExecuteScalar(SqlHelper.getConnectionString(connectionName), CommandType.Text, strSql.ToString(), null);
+            object obj = SqlHelper.ExecuteScalar(SqlHelper.GetConnectionString(connectionName), CommandType.Text, strSql.ToString(), null);
             if (obj == null)
             {
                 return 0;
@@ -1190,7 +1190,7 @@ namespace Ferrero.DAL
             //string connectionString = EncryptHelper.Decrypt("77052300", ConfigurationManager.ConnectionStrings[connectionName].ConnectionString);
             StringBuilder strSql = new StringBuilder();
             strSql.Append(String.Format(" select count(1) from t_item Where FNumber = '{0}'  and FName = '{1}' ", fNumber, fName));
-            object obj = SqlHelper.ExecuteScalar(SqlHelper.getConnectionString(connectionName), CommandType.Text, strSql.ToString(), null);
+            object obj = SqlHelper.ExecuteScalar(SqlHelper.GetConnectionString(connectionName), CommandType.Text, strSql.ToString(), null);
             if (obj == null)
             {
                 return false;
@@ -1218,7 +1218,7 @@ namespace Ferrero.DAL
             //string connectionString = EncryptHelper.Decrypt("77052300", ConfigurationManager.ConnectionStrings[connectionName].ConnectionString);
             StringBuilder strSql = new StringBuilder();
             strSql.Append(String.Format(" select count(1) from t_ICItem Where FNumber = '{0}'  and FName = '{1}' ", fNumber, fName));
-            object obj = SqlHelper.ExecuteScalar(SqlHelper.getConnectionString(connectionName), CommandType.Text, strSql.ToString(), null);
+            object obj = SqlHelper.ExecuteScalar(SqlHelper.GetConnectionString(connectionName), CommandType.Text, strSql.ToString(), null);
             if (obj == null)
             {
                 return false;
@@ -1243,7 +1243,7 @@ namespace Ferrero.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(String.Format(" Select UnitPrice from sku Where ProductCode ='{0}'", sLongCode));
-            object obj = SqlHelper.ExecuteScalar(SqlHelper.getConnectionString(connectionName), CommandType.Text, strSql.ToString(), null);
+            object obj = SqlHelper.ExecuteScalar(SqlHelper.GetConnectionString(connectionName), CommandType.Text, strSql.ToString(), null);
             if (obj == null)
             {
                 return 0;

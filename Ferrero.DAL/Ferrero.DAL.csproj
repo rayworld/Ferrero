@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ray.Framework.DBUtility">
+      <HintPath>..\Ferrero\bin\Debug\Ray.Framework.DBUtility.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -46,10 +49,6 @@
     <ProjectReference Include="..\Ferrero.Model\Ferrero.Model.csproj">
       <Project>{55758D74-C3D7-4CE8-8C84-A07E9B60CB9A}</Project>
       <Name>Ferrero.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Raysoft.DBUtility\Raysoft.DBUtility.csproj">
-      <Project>{065298FD-AF43-4AE8-9F2C-190899447C17}</Project>
-      <Name>Raysoft.DBUtility</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

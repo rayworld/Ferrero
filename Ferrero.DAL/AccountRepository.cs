@@ -2,7 +2,7 @@
 using System.Text;
 using System.Data.SqlClient;
 
-using Raysoft.DBUtility;
+using Ray.Framework.DBUtility;
 
 namespace Ferrero.DAL
 {
@@ -37,7 +37,7 @@ namespace Ferrero.DAL
                 parameters[0].Value = userName;
                 parameters[1].Value = password;
 
-                object obj = SqlHelper.ExecuteScalar(SqlHelper.getConnectionString(sConnectionName), CommandType.Text, strSql.ToString(), parameters);
+                object obj = SqlHelper.ExecuteScalar(SqlHelper.GetConnectionString(sConnectionName), CommandType.Text, strSql.ToString(), parameters);
                 return obj == null ? 0 : int.Parse(obj.ToString());
             }
             else
