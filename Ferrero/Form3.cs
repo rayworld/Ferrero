@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 using DevComponents.DotNetBar;
 
-using Raysoft.Common;
+using Ray.Framework.Converter;
 
 namespace Ferrero
 {

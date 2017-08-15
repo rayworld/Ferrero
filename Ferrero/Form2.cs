@@ -7,7 +7,7 @@ using DevComponents.DotNetBar;
 
 using Ferrero.BLL;
 using Ferrero.Model;
-using Raysoft.Common;
+using Ray.Framework.Converter;
     
 namespace Ferrero
 {

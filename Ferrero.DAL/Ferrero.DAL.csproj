@@ -31,8 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ray.Framework.DBUtility">
+    <Reference Include="Ray.Framework.DBUtility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Ferrero\bin\Debug\Ray.Framework.DBUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="Ray.Framework.Encrypt, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Ferrero\bin\Debug\Ray.Framework.Encrypt.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

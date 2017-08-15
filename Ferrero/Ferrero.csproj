@@ -56,13 +56,21 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\DevComponents.DotNetBar2.dll</HintPath>
     </Reference>
-    <Reference Include="Ray.Config, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Ray.Framework.Config, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\Ray.Config.dll</HintPath>
+      <HintPath>bin\Debug\Ray.Framework.Config.dll</HintPath>
     </Reference>
-    <Reference Include="Ray.Encrypt, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Ray.Framework.Converter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\Ray.Encrypt.dll</HintPath>
+      <HintPath>bin\Debug\Ray.Framework.Converter.dll</HintPath>
+    </Reference>
+    <Reference Include="Ray.Framework.DBUtility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Ray.Framework.DBUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="Ray.Framework.Encrypt, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Ray.Framework.Encrypt.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -160,10 +168,6 @@
     <ProjectReference Include="..\Ferrero.Model\Ferrero.Model.csproj">
       <Project>{55758D74-C3D7-4CE8-8C84-A07E9B60CB9A}</Project>
       <Name>Ferrero.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Raysoft.Common\Raysoft.Common.csproj">
-      <Project>{F6B013C2-12AB-49B6-9A83-204C1B6B084F}</Project>
-      <Name>Raysoft.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

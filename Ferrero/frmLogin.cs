@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 using DevComponents.DotNetBar;
 using Ferrero.BLL;
-using Ray.Encrypt;
+using Ray.Framework.Encrypt;
 
 namespace Ferrero
 {
@@ -36,7 +36,8 @@ namespace Ferrero
             //this.textBox1 .Text = encrypt.EncryptPassword("kingdee", 12);
             //2015-03-09 use administrator/kingdee login
             UserName = "administrator";
-            Password = "kingdee";
+            //Password = "kingdee";
+            Password = "";
             //this.Width = 380;
             //this.Height = 260;
 
@@ -45,8 +46,9 @@ namespace Ferrero
         private void button1_Click(object sender, EventArgs e)
         {
             AccountService bAccountService = new AccountService();
-            PassService bPassService = new PassService();
-            if (bAccountService.UserLogin("Account", UserName, bPassService.EncryptPassword(Password, 12)))
+            //PassService bPassService = new PassService();
+            //if (bAccountService.UserLogin("Account", UserName, bPassService.EncryptPassword(Password, 12)))
+            if (bAccountService.UserLogin("Account", UserName, PassService.EncryptPassword(Password, 12)))
             ///if (1 == 1)
             {
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
@@ -62,6 +64,26 @@ namespace Ferrero
         private void button2_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
 
     }
