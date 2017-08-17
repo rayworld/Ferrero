@@ -244,7 +244,7 @@ namespace Ferrero.DAL
 			}
 			strSql.Append(" ) TT");
 			strSql.AppendFormat(" WHERE TT.Row between {0} and {1}", startIndex, endIndex);
-            return SqlHelper.query(SqlHelper.GetConnectionString(sConnectionName),  strSql.ToString());
+            return SqlHelper.Query(SqlHelper.GetConnectionString(sConnectionName),  strSql.ToString());
 		}
 
 		/*
