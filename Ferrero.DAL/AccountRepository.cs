@@ -26,7 +26,7 @@ namespace Ferrero.DAL
             {
                 //string connectionString = EncryptHelper.Decrypt("77052300",ConfigurationManager.ConnectionStrings[connectionName].ConnectionString);
                 StringBuilder strSql = new StringBuilder();
-                strSql.Append("select Count(1) ");
+                strSql.Append("select Count(*) ");
                 strSql.Append(" FROM t_User ");
                 strSql.Append(" where t_User.FName = @FName and t_User.FSID = @FSID ");
 
@@ -37,7 +37,7 @@ namespace Ferrero.DAL
                 parameters[0].Value = userName;
                 parameters[1].Value = password;
 
-                object obj = SqlHelper.ExecuteScalar(SqlHelper.GetConnectionString(sConnectionName), CommandType.Text, strSql.ToString(), parameters);
+                object obj = SqlHelper.GetSingle(SqlHelper.GetConnectionString(sConnectionName), strSql.ToString(), parameters);
                 return obj == null ? 0 : int.Parse(obj.ToString());
             }
             else

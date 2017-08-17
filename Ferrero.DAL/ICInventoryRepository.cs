@@ -53,7 +53,7 @@ namespace Ferrero.DAL
 			parameters[10].Value = model.FAuxPropID;
 			parameters[11].Value = model.FSecQty;
 
-            int rows = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnectionString(sConnectionName),CommandType.Text, strSql.ToString(), parameters);
+            int rows = SqlHelper.ExecuteSql(SqlHelper.GetConnectionString(sConnectionName), strSql.ToString(), parameters);
 			if (rows > 0)
 			{
 				return true;
@@ -92,7 +92,7 @@ namespace Ferrero.DAL
 			parameters[7].Value = FKFDate;
 
 			Ferrero.Model.ICInventory model=new Ferrero.Model.ICInventory();
-            DataSet ds = SqlHelper.ExecuteDataSet(SqlHelper.GetConnectionString(sConnectionName),CommandType.Text, strSql.ToString(), parameters);
+            DataSet ds = SqlHelper.Query(SqlHelper.GetConnectionString(sConnectionName),strSql.ToString(), parameters);
 			if(ds.Tables[0].Rows.Count>0)
 			{
 				return DataRowToModel(ds.Tables[0].Rows[0]);
@@ -176,7 +176,7 @@ namespace Ferrero.DAL
 			{
 				strSql.Append(" where "+strWhere);
 			}
-            return SqlHelper.ExecuteDataSet(SqlHelper.GetConnectionString(sConnectionName), CommandType.Text, strSql.ToString());
+            return SqlHelper.Query(SqlHelper.GetConnectionString(sConnectionName),  strSql.ToString());
 		}
 
 		/// <summary>
@@ -197,7 +197,7 @@ namespace Ferrero.DAL
 				strSql.Append(" where "+strWhere);
 			}
 			strSql.Append(" order by " + filedOrder);
-            return SqlHelper.ExecuteDataSet(SqlHelper.GetConnectionString(sConnectionName),CommandType.Text, strSql.ToString());
+            return SqlHelper.Query(SqlHelper.GetConnectionString(sConnectionName), strSql.ToString());
 		}
 
 		/// <summary>
@@ -211,7 +211,7 @@ namespace Ferrero.DAL
 			{
 				strSql.Append(" where "+strWhere);
 			}
-            object obj = SqlHelper.ExecuteScalar(SqlHelper.GetConnectionString(sConnectionName), CommandType.Text, strSql.ToString());
+            object obj = SqlHelper.GetSingle(SqlHelper.GetConnectionString(sConnectionName), strSql.ToString());
 			if (obj == null)
 			{
 				return 0;
@@ -244,7 +244,7 @@ namespace Ferrero.DAL
 			}
 			strSql.Append(" ) TT");
 			strSql.AppendFormat(" WHERE TT.Row between {0} and {1}", startIndex, endIndex);
-            return SqlHelper.ExecuteDataSet(SqlHelper.GetConnectionString(sConnectionName), CommandType.Text, strSql.ToString());
+            return SqlHelper.query(SqlHelper.GetConnectionString(sConnectionName),  strSql.ToString());
 		}
 
 		/*
@@ -283,7 +283,7 @@ namespace Ferrero.DAL
             StringBuilder strSql = new StringBuilder();
             strSql.Append("delete from ICInventory ");
 
-            int rows = SqlHelper.ExecuteNonQuery(SqlHelper.GetConnectionString(sConnectionName), CommandType.Text, strSql.ToString(), null);
+            int rows = SqlHelper.ExecuteSql(SqlHelper.GetConnectionString(sConnectionName), strSql.ToString(), null);
             if (rows > 0)
             {
                 return true;
@@ -309,7 +309,7 @@ namespace Ferrero.DAL
             strSql.Append("Select " + sValue + " FROM " + sTableName + " ");
             strSql.Append(" Where " + sRelatColumn + " = '" + sExcelVal + "'");
 
-            object obj = SqlHelper.ExecuteScalar(SqlHelper.GetConnectionString(sConnectionName), CommandType.Text, strSql.ToString());
+            object obj = SqlHelper.GetSingle(SqlHelper.GetConnectionString(sConnectionName), strSql.ToString());
             return obj;
         }
         #endregion  ExtensionMethod

@@ -22,6 +22,7 @@ namespace Ferrero.BLL
         public bool UserLogin(string sConnectionName, string fName, string FPassword)
         {
             return dal.UserLogin(sConnectionName, fName, FPassword) > 0 ? true : false;
+            //return true;
         }
 
         #endregion  ExtensionMethod

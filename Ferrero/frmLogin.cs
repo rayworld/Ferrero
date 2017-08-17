@@ -36,8 +36,8 @@ namespace Ferrero
             //this.textBox1 .Text = encrypt.EncryptPassword("kingdee", 12);
             //2015-03-09 use administrator/kingdee login
             UserName = "administrator";
-            //Password = "kingdee";
-            Password = "";
+            Password = "kingdee";
+            //Password = "";
             //this.Width = 380;
             //this.Height = 260;
 
@@ -49,7 +49,7 @@ namespace Ferrero
             //PassService bPassService = new PassService();
             //if (bAccountService.UserLogin("Account", UserName, bPassService.EncryptPassword(Password, 12)))
             if (bAccountService.UserLogin("Account", UserName, PassService.EncryptPassword(Password, 12)))
-            ///if (1 == 1)
+            //if (1 == 1)
             {
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 this.Close();
