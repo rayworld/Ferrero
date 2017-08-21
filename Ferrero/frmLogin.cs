@@ -36,7 +36,7 @@ namespace Ferrero
             //this.textBox1 .Text = encrypt.EncryptPassword("kingdee", 12);
             //2015-03-09 use administrator/kingdee login
             UserName = "administrator";
-            Password = "kingdee";
+            Password = "";
             //Password = "";
             //this.Width = 380;
             //this.Height = 260;
