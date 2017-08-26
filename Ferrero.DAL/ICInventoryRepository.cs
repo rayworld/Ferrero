@@ -212,14 +212,8 @@ namespace Ferrero.DAL
 				strSql.Append(" where "+strWhere);
 			}
             object obj = SqlHelper.GetSingle(SqlHelper.GetConnectionString(sConnectionName), strSql.ToString());
-			if (obj == null)
-			{
-				return 0;
-			}
-			else
-			{
-				return Convert.ToInt32(obj);
-			}
+			return obj != null ? Convert.ToInt32(obj):0;
+
 		}
 		/// <summary>
 		/// 分页获取数据列表

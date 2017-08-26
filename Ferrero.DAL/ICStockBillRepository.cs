@@ -1054,7 +1054,10 @@ namespace Ferrero.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(" Select FMaxNum From ICMaxNum Where FTableName = 'ICStockBill' ");
-            return int.Parse(SqlHelper.GetSingle(SqlHelper.GetConnectionString(connectionName), strSql.ToString(), null).ToString());
+            //return int.Parse(SqlHelper.GetSingle(SqlHelper.GetConnectionString(connectionName), strSql.ToString(), null).ToString());
+            object obj = SqlHelper.GetSingle(SqlHelper.GetConnectionString(connectionName), strSql.ToString(), null);
+            return obj != null ? int.Parse(obj.ToString()) : 0;
+
         }
 
         /// <summary>
@@ -1064,8 +1067,8 @@ namespace Ferrero.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(String.Format(" select FItemID from t_stock where FName = '{0}' ", stockName));
-            string strStockID = SqlHelper.GetSingle(SqlHelper.GetConnectionString(connectionName), strSql.ToString(), null).ToString();
-            return string.IsNullOrEmpty(strStockID) == false ? int.Parse(strStockID) : 0;
+             object obj = SqlHelper.GetSingle(SqlHelper.GetConnectionString(connectionName), strSql.ToString(), null);
+            return obj != null  ? int.Parse(obj.ToString()) : 0;
         }
 
         /// <summary>
@@ -1129,8 +1132,8 @@ namespace Ferrero.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(String.Format(" Select FUserID From t_User Where FName = '{0}' ", UserName));
-            string sUserID = SqlHelper.GetSingle(SqlHelper.GetConnectionString(connectionName), strSql.ToString(), null).ToString();
-            return string.IsNullOrEmpty(sUserID) == false ? int.Parse(sUserID) : 0;
+            object obj = SqlHelper.GetSingle(SqlHelper.GetConnectionString(connectionName), strSql.ToString(), null).ToString();
+            return obj != null ? int.Parse(obj.ToString()) : 0;
         }
         #endregion  ExtensionMethod
     }

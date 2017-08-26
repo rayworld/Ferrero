@@ -1124,14 +1124,7 @@ namespace Ferrero.DAL
             StringBuilder strSql = new StringBuilder();
             strSql.Append(String.Format(" select fItemID from t_ICItemCore Where fNumber = '{0}' ", fNumber));
             object obj = SqlHelper.GetSingle(SqlHelper.GetConnectionString(connectionName), strSql.ToString(), null);
-            if (obj == null)
-            {
-                return 0;
-            }
-            else
-            {
-                return Convert.ToInt32(obj);
-            }
+            return obj != null ? Convert.ToInt32(obj.ToString()) : 0;
         }
 
         /// <summary>
@@ -1146,14 +1139,7 @@ namespace Ferrero.DAL
             StringBuilder strSql = new StringBuilder();
             strSql.Append(String.Format(" select fItemID from t_MeasureUnit Where FName = '{0}' ", fName));
             object obj = SqlHelper.GetSingle(SqlHelper.GetConnectionString(connectionName), strSql.ToString(), null);
-            if (obj == null)
-            {
-                return 0;
-            }
-            else
-            {
-                return Convert.ToInt32(obj);
-            }
+            return obj != null ? int.Parse(obj.ToString()) : 0;
         }
 
         /// <summary>
@@ -1168,14 +1154,7 @@ namespace Ferrero.DAL
             StringBuilder strSql = new StringBuilder();
             strSql.Append(String.Format(" select fItemID from t_item Where FNumber = '{0}' ", fNumber));
             object obj = SqlHelper.GetSingle(SqlHelper.GetConnectionString(connectionName), strSql.ToString(), null);
-            if (obj == null)
-            {
-                return 0;
-            }
-            else
-            {
-                return Convert.ToInt32(obj);
-            }
+            return obj != null ? int.Parse(obj.ToString()) : 0;
         }
 
         /// <summary>
@@ -1191,18 +1170,7 @@ namespace Ferrero.DAL
             StringBuilder strSql = new StringBuilder();
             strSql.Append(String.Format(" select count(1) from t_item Where FNumber = '{0}'  and FName = '{1}' ", fNumber, fName));
             object obj = SqlHelper.GetSingle(SqlHelper.GetConnectionString(connectionName), strSql.ToString(), null);
-            if (obj == null)
-            {
-                return false;
-            }
-            else if (Convert.ToInt32(obj) == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return obj != null ? int.Parse(obj.ToString()) != 0 ? true : false : false;
         }
 
 
@@ -1219,18 +1187,7 @@ namespace Ferrero.DAL
             StringBuilder strSql = new StringBuilder();
             strSql.Append(String.Format(" select count(1) from t_ICItem Where FNumber = '{0}'  and FName = '{1}' ", fNumber, fName));
             object obj = SqlHelper.GetSingle(SqlHelper.GetConnectionString(connectionName), strSql.ToString(), null);
-            if (obj == null)
-            {
-                return false;
-            }
-            else if (Convert.ToInt32(obj) == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return obj != null ? Convert.ToInt32(obj) != 0 ? true : false : false;
         }
 
         /// <summary>
@@ -1244,14 +1201,7 @@ namespace Ferrero.DAL
             StringBuilder strSql = new StringBuilder();
             strSql.Append(String.Format(" Select UnitPrice from sku Where ProductCode ='{0}'", sLongCode));
             object obj = SqlHelper.GetSingle(SqlHelper.GetConnectionString(connectionName), strSql.ToString(), null);
-            if (obj == null)
-            {
-                return 0;
-            }
-            else
-            {
-                return Decimal.Parse(obj.ToString());
-            }
+            return obj != null ? Decimal.Parse(obj.ToString()) : 0;
         }
         #endregion  ExtensionMethod
     }

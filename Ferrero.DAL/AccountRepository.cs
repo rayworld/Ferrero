@@ -38,7 +38,7 @@ namespace Ferrero.DAL
                 parameters[1].Value = password;
 
                 object obj = SqlHelper.GetSingle(SqlHelper.GetConnectionString(sConnectionName), strSql.ToString(), parameters);
-                return obj == null ? 0 : int.Parse(obj.ToString());
+                return obj != null ? int.Parse(obj.ToString()) : 0;
             }
             else
             {
