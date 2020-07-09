@@ -46,7 +46,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 44);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 27;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -66,7 +66,7 @@
             this.btnDelete,
             this.biImporData});
             this.bar1.Location = new System.Drawing.Point(0, 0);
-            this.bar1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.bar1.Margin = new System.Windows.Forms.Padding(4);
             this.bar1.Name = "bar1";
             this.bar1.Size = new System.Drawing.Size(1028, 44);
             this.bar1.Stretch = true;
@@ -103,6 +103,7 @@
             // 
             this.biImporData.Name = "biImporData";
             this.biImporData.Text = "导入入库单";
+            this.biImporData.Click += new System.EventHandler(this.biImporData_Click);
             // 
             // Form1
             // 
@@ -112,7 +113,7 @@
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.bar1);
             this.DoubleBuffered = true;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "rferefreferf";
             this.Load += new System.EventHandler(this.Form1_Load);

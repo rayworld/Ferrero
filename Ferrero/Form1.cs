@@ -460,5 +460,10 @@ namespace Ferrero
             sConnectionName = SubCompany == "" ? "": SubCompany;
 
         }
+
+        private void biImporData_Click(object sender, EventArgs e)
+        {
+            //合并check和Import代码
+        }
     }
 }
