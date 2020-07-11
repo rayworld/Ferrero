@@ -23,6 +23,11 @@ namespace Ferrero
             InitializeComponent();
         }
 
+        /// <summary>
+        /// 导入Excel文件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnOpenExcel_Click(object sender, EventArgs e)
         {
             Excel2DataTable common = new Excel2DataTable();
@@ -53,7 +58,7 @@ namespace Ferrero
                     //{ 
                     //}
 
-                    common.ChkColumnsName(new string[] { "单据编号", "日期", "商品长代码", "批号", "单位", "实收数量", "单价", "收料仓库", "基本单位实收数量", "验收", "保管", "制单" }, dt);
+                    ///common.ChkColumnsName(new string[] { "单据编号", "日期", "商品长代码", "批号", "单位", "实收数量", "单价", "收料仓库", "基本单位实收数量", "验收", "保管", "制单" }, dt);
                 }
             }
         }
@@ -66,7 +71,7 @@ namespace Ferrero
         /// 
         /// </summary>
         /// <param name="dt"></param>
-        private void checkData(DataTable dt)
+        private int checkData(DataTable dt)
         {
             int ierrData = 0;
             for (int i = 0; i < dt.Rows.Count; i++)
@@ -90,14 +95,7 @@ namespace Ferrero
                     ierrData++;
                 }
             }
-            if (ierrData > 0)
-            {
-                MessageBoxEx.Show(String.Format("总共测试数据 {0} 行，其中测试失败记录有 {1} 项！", dt.Rows.Count, ierrData));
-            }
-            else
-            {
-                MessageBoxEx.Show(String.Format("总共测试数据 {0} 行，没有检测到失败数据！", dt.Rows.Count));
-            }
+            return ierrData;
         }
         #endregion
 
@@ -420,27 +418,27 @@ namespace Ferrero
 
         #endregion
 
-        private void btnImport_Click(object sender, EventArgs e)
-        {
-            if (SubCompany.ToLower() == "wuhan")
-            {
-                Excel2DB(dt);
-            }
-            else
-            {
-                Excel2DB1(dt);
-            }
-        }
+        //private void btnImport_Click(object sender, EventArgs e)
+        //{
+        //    //if (SubCompany.ToLower() == "wuhan")
+        //    //{
+        //    //    Excel2DB(dt);
+        //    //}
+        //    //else
+        //    //{
+        //    //    Excel2DB1(dt);
+        //    //}
+        //}
 
-        /// <summary>
-        /// 验证数据是否合法
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnCheck_Click(object sender, EventArgs e)
-        {
-            checkData(dt);
-        }
+        ///// <summary>
+        ///// 验证数据是否合法
+        ///// </summary>
+        ///// <param name="sender"></param>
+        ///// <param name="e"></param>
+        //private void btnCheck_Click(object sender, EventArgs e)
+        //{
+        //    //checkData(dt);
+        //}
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
@@ -463,7 +461,39 @@ namespace Ferrero
 
         private void biImporData_Click(object sender, EventArgs e)
         {
+
             //合并check和Import代码
+            
+            Excel2DataTable common = new Excel2DataTable();
+            
+            if(dt != null && dt.Rows.Count > 0)
+            {
+                //1、检查Excel文件完整性
+                common.ChkColumnsName(new string[] { "单据编号", "日期", "商品长代码", "批号", "单位", "实收数量", "单价", "收料仓库", "基本单位实收数量", "验收", "保管", "制单" }, dt);
+                //2、检查数据同步情况
+                int CheckResult = checkData(dt);
+                if (CheckResult == 0)
+                {
+                    //3、如果检查数据成功就开始导入数据
+                    if (SubCompany.ToLower() == "wuhan")
+                    {
+                        Excel2DB(dt);
+                    }
+                    else
+                    {
+                        Excel2DB1(dt);
+                    }
+                }
+                else
+                {
+                    MessageBoxEx.Show(String.Format("总共测试数据 {0} 行，其中测试失败记录有 {1} 项！", dt.Rows.Count, CheckResult));
+                }
+            }
+            else
+            {
+                MessageBox.Show("请先打开一个Excel文件");
+            }
+
         }
     }
 }

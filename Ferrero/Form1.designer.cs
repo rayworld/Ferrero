@@ -85,13 +85,11 @@
             // 
             this.btnCheck.Name = "btnCheck";
             this.btnCheck.Text = "导入测试(&T)";
-            this.btnCheck.Click += new System.EventHandler(this.btnCheck_Click);
             // 
             // btnImport
             // 
             this.btnImport.Name = "btnImport";
             this.btnImport.Text = "导入入库单(&I)";
-            this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
             // 
             // btnDelete
             // 

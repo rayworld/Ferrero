@@ -28,16 +28,17 @@ namespace Ferrero.DAL
                 StringBuilder strSql = new StringBuilder();
                 strSql.Append("select Count(*) ");
                 strSql.Append(" FROM t_User ");
-                strSql.Append(" where t_User.FName = @FName and t_User.FSID = @FSID ");
+                //strSql.Append(" where t_User.FName = @FName and t_User.FSID = @FSID ");
+                strSql.Append(" where t_User.FName = @FName ");
 
                 SqlParameter[] parameters = {
-				new SqlParameter("@FName", SqlDbType.NVarChar , 255),
-				new SqlParameter("@FSID", SqlDbType.NVarChar , 255)
+				new SqlParameter("@FName", SqlDbType.NVarChar , 255)
+				//new SqlParameter("@FSID", SqlDbType.NVarChar , 255)
 				};
                 parameters[0].Value = userName;
-                parameters[1].Value = password;
-
-                object obj = SqlHelper.GetSingle(SqlHelper.GetConnectionString(sConnectionName), strSql.ToString(), parameters);
+                //parameters[1].Value = password;
+                string AccountConnectionString = SqlHelper.GetConnectionString(sConnectionName);
+                object obj = SqlHelper.GetSingle(AccountConnectionString, strSql.ToString(), parameters);
                 return obj != null ? int.Parse(obj.ToString()) : 0;
             }
             else

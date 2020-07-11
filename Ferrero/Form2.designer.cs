@@ -38,6 +38,7 @@
             this.btnCheck = new DevComponents.DotNetBar.ButtonItem();
             this.btnImport = new DevComponents.DotNetBar.ButtonItem();
             this.btnDelete = new DevComponents.DotNetBar.ButtonItem();
+            this.biCheckImport = new DevComponents.DotNetBar.ButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bar1)).BeginInit();
             this.SuspendLayout();
@@ -54,11 +55,11 @@
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 25);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(2);
+            this.dataGridView1.Location = new System.Drawing.Point(0, 40);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 27;
-            this.dataGridView1.Size = new System.Drawing.Size(703, 321);
+            this.dataGridView1.Size = new System.Drawing.Size(1406, 652);
             this.dataGridView1.TabIndex = 1;
             // 
             // controlContainerItem1
@@ -72,11 +73,14 @@
             // 
             // 
             // 
-            this.itemContainer1.BackgroundStyle.Class = "";
             this.itemContainer1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.itemContainer1.Name = "itemContainer1";
             this.itemContainer1.SubItems.AddRange(new DevComponents.DotNetBar.BaseItem[] {
             this.controlContainerItem3});
+            // 
+            // 
+            // 
+            this.itemContainer1.TitleStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             // 
             // controlContainerItem3
             // 
@@ -93,11 +97,12 @@
             this.btnOpen,
             this.btnCheck,
             this.btnImport,
-            this.btnDelete});
+            this.btnDelete,
+            this.biCheckImport});
             this.bar1.Location = new System.Drawing.Point(0, 0);
-            this.bar1.Margin = new System.Windows.Forms.Padding(2);
+            this.bar1.Margin = new System.Windows.Forms.Padding(4);
             this.bar1.Name = "bar1";
-            this.bar1.Size = new System.Drawing.Size(703, 25);
+            this.bar1.Size = new System.Drawing.Size(1406, 40);
             this.bar1.Stretch = true;
             this.bar1.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.bar1.TabIndex = 0;
@@ -114,13 +119,11 @@
             // 
             this.btnCheck.Name = "btnCheck";
             this.btnCheck.Text = "导入测试(&T)";
-            this.btnCheck.Click += new System.EventHandler(this.btnCheck_Click);
             // 
             // btnImport
             // 
             this.btnImport.Name = "btnImport";
             this.btnImport.Text = "导入销售出库单(&I)";
-            this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
             // 
             // btnDelete
             // 
@@ -128,15 +131,21 @@
             this.btnDelete.Text = "删除历史数据(&D)";
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
+            // biCheckImport
+            // 
+            this.biCheckImport.Name = "biCheckImport";
+            this.biCheckImport.Text = "导入出库单";
+            this.biCheckImport.Click += new System.EventHandler(this.biCheckImport_Click);
+            // 
             // Form2
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(703, 346);
+            this.ClientSize = new System.Drawing.Size(1406, 692);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.bar1);
             this.DoubleBuffered = true;
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form2";
             this.Text = "Form2";
             this.Load += new System.EventHandler(this.Form2_Load);
@@ -158,5 +167,6 @@
         private DevComponents.DotNetBar.ButtonItem btnCheck;
         private DevComponents.DotNetBar.ButtonItem btnImport;
         private DevComponents.DotNetBar.ButtonItem btnDelete;
+        private DevComponents.DotNetBar.ButtonItem biCheckImport;
     }
 }

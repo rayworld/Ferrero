@@ -27,6 +27,7 @@ namespace Ferrero
             InitializeComponent();
         }
 
+        #region 事件
         /// <summary>
         /// 打开Ferrero销售出库Excel文件
         /// </summary>
@@ -65,6 +66,67 @@ namespace Ferrero
                 }
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Form2_Load(object sender, EventArgs e)
+        {
+            btnDelete.Visible = (UserName.ToLower() == "administrator") ? true : false;
+
+            if (SubCompany != "" && SubCompany != null)
+            {
+                sConnectionName = SubCompany;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            frmDelateConfirm frm = new frmDelateConfirm(21, sConnectionName);
+            if (frm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                //Delete data
+            }
+        }
+
+        private void biCheckImport_Click(object sender, EventArgs e)
+        {
+            //1、确定Excel文件完整性
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                //2、检查数据完整性
+                int CheckResult = checkData(dt);
+                if (CheckResult == 0)
+                {
+                    //3、导入数据
+                    if (SubCompany.ToLower() == "wuhan")
+                    {
+                        Excel2DB(dt);
+                    }
+                    else
+                    {
+                        Excel2DB1(dt);
+                    }
+                }
+                else
+                {
+                    MessageBoxEx.Show(String.Format("总共测试数据 {0} 行，其中测试失败记录有 {1} 项！", dt.Rows.Count, CheckResult));
+                }
+            }
+            else
+            {
+                MessageBox.Show("请先打开Excel文件！");
+            }
+        }
+
+        #endregion
 
         #region 私有过程
 
@@ -473,7 +535,12 @@ namespace Ferrero
             MessageBox.Show(String.Format("总共有 {0} 条记录,导入失败 {1} 条！", dt.Rows.Count, dt.Rows.Count - successCount));
         }
 
-        private void checkData(DataTable dt)
+        /// <summary>
+        /// 检查出库单数据完整性
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        private int checkData(DataTable dt)
         {
             int ierrData = 0; 
             for (int i=0; i < dt.Rows.Count; i++)
@@ -505,75 +572,43 @@ namespace Ferrero
                     ierrData++;
                 }
             }
-            if (ierrData > 0)
-            {
-                MessageBoxEx.Show(String.Format("总共测试数据 {0} 行，其中测试失败记录有 {1} 项！", dt.Rows.Count, ierrData));
-            }
-            else
-            {
-                MessageBoxEx.Show(String.Format("总共测试数据 {0} 行，没有检测到失败数据！", dt.Rows.Count));
-            }
+            return ierrData;
         }
-        
+
         #endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnImport_Click(object sender, EventArgs e)
-        {
-            //InsertStockBill(50000, "XOUT222333", new DateTime(2013,4,2),1, 8888);
-            //InsertStockBillEntry(50000, 1, 6424, 100, 10, 1000, "21021122", 241, 505);
-            ///检查Excel文件有关列是否存在
-            if (SubCompany.ToLower() == "wuhan")
-            {
-                Excel2DB(dt);
-            }
-            else
-            {
-                Excel2DB1(dt);
-            }
-        }
+        #region 无用的代码
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnCheck_Click(object sender, EventArgs e)
-        {
-            checkData(dt);
-        }
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="sender"></param>
+        ///// <param name="e"></param>
+        //private void btnImport_Click(object sender, EventArgs e)
+        //{
+        //    //InsertStockBill(50000, "XOUT222333", new DateTime(2013,4,2),1, 8888);
+        //    //InsertStockBillEntry(50000, 1, 6424, 100, 10, 1000, "21021122", 241, 505);
+        //    ///检查Excel文件有关列是否存在
+        //    if (SubCompany.ToLower() == "wuhan")
+        //    {
+        //        Excel2DB(dt);
+        //    }
+        //    else
+        //    {
+        //        Excel2DB1(dt);
+        //    }
+        //}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Form2_Load(object sender, EventArgs e)
-        {            
-            btnDelete.Visible = (UserName .ToLower() == "administrator")? true: false;
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="sender"></param>
+        ///// <param name="e"></param>
+        //private void btnCheck_Click(object sender, EventArgs e)
+        //{
+        //    checkData(dt);
+        //}
 
-            if (SubCompany != "" && SubCompany != null)
-            {
-                sConnectionName = SubCompany;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnDelete_Click(object sender, EventArgs e)
-        {
-            frmDelateConfirm frm = new frmDelateConfirm(21,sConnectionName );
-            if (frm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                //Delete data
-            }
-        }
+        #endregion
     }
 }
