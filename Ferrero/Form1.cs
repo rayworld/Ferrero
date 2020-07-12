@@ -1,5 +1,6 @@
 ﻿using DevComponents.DotNetBar;
 using Ferrero.BLL;
+using Ferrero.Common;
 using Ferrero.Model;
 using Ray.Framework.Converter;
 using System;
@@ -11,9 +12,13 @@ namespace Ferrero
 {
     public partial class Form1  : Office2007Form 
     {
+        //导入数据缓存
         DataTable dt = new DataTable();
+        //用户名
         public string UserName { get; set; }
+        //子公司名称
         public string SubCompany{get;set;}
+        //数据库连接名称
         string sConnectionName = "";
         
         public Form1(string userName222, string subCompany)
@@ -23,45 +28,176 @@ namespace Ferrero
             InitializeComponent();
         }
 
+        #region 公共事件
+
         /// <summary>
-        /// 导入Excel文件
+        /// 显示行号
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnOpenExcel_Click(object sender, EventArgs e)
+        private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
-            Excel2DataTable common = new Excel2DataTable();
-            ///将Excel文件转成DataTable
-            dt = common.ExcelFile2DataTable();
-            if (dt != null)
+            var dgv = (DataGridView)sender;
+            if (dgv.RowHeadersVisible)
             {
-                if (dt.Rows.Count > 0)
-                {
-                    ///去掉统计行
-                    dt.Rows.RemoveAt(index: dt.Rows.Count - 1);
-                    dataGridView1.DataSource = dt;
-                    ///检查系统所需要的列是否存在
-                    ///2015 因四个公司条件一样，所以不区分不同的分公司
-                    //if (SubCompany.ToLower() == "wuhan")
-                    //{
-                    //    common.ChkColumnsName(new string[] {"单据编号", "日期","商品长代码","批号","单位","实收数量","单价","收料仓库","基本单位实收数量","验收","保管","制单"}, dt);
-                    //}
-                    //else if (SubCompany.ToLower() == "yichan")
-                    //{
-                    //    common.ChkColumnsName(new string[] { "单据编号", "日期", "商品长代码", "批号", "单位", "实收数量", "单价", "收料仓库", "基本单位实收数量", "验收", "保管", "制单" }, dt);
-                    //}
-                    //else if (SubCompany.ToLower() == "xiangfan")
-                    //{
-                    //    common.ChkColumnsName(new string[] { "单据编号", "日期", "商品长代码", "批号", "单位", "实收数量", "单价", "收料仓库", "基本单位实收数量", "验收", "保管", "制单" }, dt);
-                    //}
-                    //else
-                    //{ 
-                    //}
-
-                    ///common.ChkColumnsName(new string[] { "单据编号", "日期", "商品长代码", "批号", "单位", "实收数量", "单价", "收料仓库", "基本单位实收数量", "验收", "保管", "制单" }, dt);
-                }
+                Rectangle rect = new Rectangle(e.RowBounds.Left, e.RowBounds.Top,
+                               dgv.RowHeadersWidth, e.RowBounds.Height);
+                rect.Inflate(-2, -2);
+                TextRenderer.DrawText(e.Graphics,
+                (e.RowIndex + 1).ToString(),
+                e.InheritedRowStyle.Font,
+                rect, e.InheritedRowStyle.ForeColor,
+                TextFormatFlags.Right | TextFormatFlags.VerticalCenter
+                );
             }
         }
+
+        /// <summary>
+        /// 删除数据
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            frmDelateConfirm frm = new frmDelateConfirm(1, sConnectionName);
+            frm.ShowDialog();
+        }
+
+        /// <summary>
+        /// 窗口加载事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            btnDelete.Visible = (UserName.ToLower() == "administrator") ? true : false;
+
+            sConnectionName = SubCompany == "" ? "" : SubCompany;
+
+        }
+
+        /// <summary>
+        /// 导入数据
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void biImporData_Click(object sender, EventArgs e)
+        {
+
+            //合并Open\check和Import代码
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+            {
+                Filter = "Microsoft Excel 文件|*.xlsx;*.xls|所有文件|*.*"
+            };
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(openFileDialog.FileName))
+            {
+                string[] SheetNames = ExcelHelper.GetExcelSheetNames(openFileDialog.FileName);
+                if (SheetNames != null && SheetNames.Length > 1)//Excel有不只一个sheet，弹出选择窗口
+                {
+                    FrmSheetsSelecter frmSheetsSelecter = new FrmSheetsSelecter();
+                    frmSheetsSelecter.SheetList = SheetNames;
+                    if (frmSheetsSelecter.ShowDialog() != DialogResult.Retry)
+                    {
+                        if (frmSheetsSelecter.SelectedSheetName != "")
+                        {
+                            dt = ExcelHelper.LoadDataFromExcel(openFileDialog.FileName, frmSheetsSelecter.SelectedSheetName);
+                        }
+                        else
+                        {
+                            dt = (DataTable)null;
+                            dataGridView1.DataSource = dt;
+                            MessageBox.Show("请先选择一个工作簿",
+                                "系统错误",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Stop);
+                            return;
+                        }
+                    }
+                }
+                else if(SheetNames != null && SheetNames.Length == 1)//只有一个sheet
+                {
+                    string SelectedSheetName = SheetNames[0];
+                    dt = ExcelHelper.LoadDataFromExcel(openFileDialog.FileName, SelectedSheetName);
+                }
+                else
+                {
+                    dt = (DataTable)null;
+                    dataGridView1.DataSource = dt;
+                    MessageBox.Show("打开Excel文件出错！",
+                        "系统错误",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    return;
+                }
+            }
+            else
+            {
+                dt = (DataTable)null;
+                dataGridView1.DataSource = dt;
+                MessageBox.Show("请先打开Excel文件或者文件出错！",
+                    "系统错误",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                ///去掉统计行
+                dt.Rows.RemoveAt(index: dt.Rows.Count - 1);
+                //绑定、显示数据
+                dataGridView1.DataSource = dt;
+                //1、检查Excel文件中列完整性
+                string ErrMsg = ExcelHelper.ChkColumnsName(new string[] { "单据编号", "日期", "商品长代码", "批号", "单位", "实收数量", "单价", "收料仓库", "基本单位实收数量", "验收", "保管", "制单" }, dt);
+                if (ErrMsg == "")
+                {
+                    //2、检查数据同步情况
+                    int ErrCount = checkData(dt);
+                    if (ErrCount == 0)
+                    {
+                        //3、如果检查数据成功就开始导入数据
+                        if (SubCompany.ToLower() == "wuhan")
+                        {
+                            Excel2DB(dt);
+                        }
+                        else
+                        {
+                            Excel2DB1(dt);
+                        }
+                    }
+                    else
+                    {
+                        MessageBoxEx.Show(String.Format("总共测试数据 {0} 行，其中测试失败记录有 {1} 项！", dt.Rows.Count, ErrCount),
+                            "系统提示",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Stop);
+                        return;
+                    }
+                }
+                else
+                {
+                    //dt = (DataTable)null;
+                    //dataGridView1.DataSource = dt;
+                    MessageBox.Show("请检查Excel文件，不存在的字段有:" + ErrMsg.Substring(0, ErrMsg.Length - 1), 
+                        "系统提示",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Stop);
+                    return;
+                }
+            }
+            else
+            {
+                dt = (DataTable)null;
+                dataGridView1.DataSource = dt;
+                MessageBox.Show(" 打开Excel文件失败或无数据",
+                    "系统提示",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Stop);
+                return;
+            }
+        }
+
+        #endregion
 
         #region 私有过程
 
@@ -414,9 +550,49 @@ namespace Ferrero
         }
         #endregion
 
-
-
         #endregion
+
+        #region 无用代码
+
+        ///// <summary>
+        ///// 导入Excel文件
+        ///// </summary>
+        ///// <param name="sender"></param>
+        ///// <param name="e"></param>
+        //private void btnOpenExcel_Click(object sender, EventArgs e)
+        //{
+        //    Excel2DataTable common = new Excel2DataTable();
+        //    ///将Excel文件转成DataTable
+        //    dt = common.ExcelFile2DataTable();
+        //    if (dt != null)
+        //    {
+        //        if (dt.Rows.Count > 0)
+        //        {
+        //            ///去掉统计行
+        //            dt.Rows.RemoveAt(index: dt.Rows.Count - 1);
+        //            dataGridView1.DataSource = dt;
+        //            ///检查系统所需要的列是否存在
+        //            ///2015 因四个公司条件一样，所以不区分不同的分公司
+        //            //if (SubCompany.ToLower() == "wuhan")
+        //            //{
+        //            //    common.ChkColumnsName(new string[] {"单据编号", "日期","商品长代码","批号","单位","实收数量","单价","收料仓库","基本单位实收数量","验收","保管","制单"}, dt);
+        //            //}
+        //            //else if (SubCompany.ToLower() == "yichan")
+        //            //{
+        //            //    common.ChkColumnsName(new string[] { "单据编号", "日期", "商品长代码", "批号", "单位", "实收数量", "单价", "收料仓库", "基本单位实收数量", "验收", "保管", "制单" }, dt);
+        //            //}
+        //            //else if (SubCompany.ToLower() == "xiangfan")
+        //            //{
+        //            //    common.ChkColumnsName(new string[] { "单据编号", "日期", "商品长代码", "批号", "单位", "实收数量", "单价", "收料仓库", "基本单位实收数量", "验收", "保管", "制单" }, dt);
+        //            //}
+        //            //else
+        //            //{ 
+        //            //}
+
+        //            ///common.ChkColumnsName(new string[] { "单据编号", "日期", "商品长代码", "批号", "单位", "实收数量", "单价", "收料仓库", "基本单位实收数量", "验收", "保管", "制单" }, dt);
+        //        }
+        //    }
+        //}
 
         //private void btnImport_Click(object sender, EventArgs e)
         //{
@@ -439,61 +615,7 @@ namespace Ferrero
         //{
         //    //checkData(dt);
         //}
+        #endregion
 
-        private void btnDelete_Click(object sender, EventArgs e)
-        {
-            frmDelateConfirm frm = new frmDelateConfirm(1, sConnectionName);
-            frm.ShowDialog();
-        }
-
-        /// <summary>
-        /// 窗口加载事件
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            btnDelete.Visible = (UserName.ToLower() == "administrator") ? true : false;
-
-            sConnectionName = SubCompany == "" ? "": SubCompany;
-
-        }
-
-        private void biImporData_Click(object sender, EventArgs e)
-        {
-
-            //合并check和Import代码
-            
-            Excel2DataTable common = new Excel2DataTable();
-            
-            if(dt != null && dt.Rows.Count > 0)
-            {
-                //1、检查Excel文件完整性
-                common.ChkColumnsName(new string[] { "单据编号", "日期", "商品长代码", "批号", "单位", "实收数量", "单价", "收料仓库", "基本单位实收数量", "验收", "保管", "制单" }, dt);
-                //2、检查数据同步情况
-                int CheckResult = checkData(dt);
-                if (CheckResult == 0)
-                {
-                    //3、如果检查数据成功就开始导入数据
-                    if (SubCompany.ToLower() == "wuhan")
-                    {
-                        Excel2DB(dt);
-                    }
-                    else
-                    {
-                        Excel2DB1(dt);
-                    }
-                }
-                else
-                {
-                    MessageBoxEx.Show(String.Format("总共测试数据 {0} 行，其中测试失败记录有 {1} 项！", dt.Rows.Count, CheckResult));
-                }
-            }
-            else
-            {
-                MessageBox.Show("请先打开一个Excel文件");
-            }
-
-        }
     }
 }

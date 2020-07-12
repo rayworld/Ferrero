@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1169
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ferrero.DAL", "Ferrero.DAL\Ferrero.DAL.csproj", "{7A3DEE25-AD17-4908-969A-E1654CCF302D}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ferrero.BLL", "Ferrero.BLL\Ferrero.BLL.csproj", "{1E509982-4C4D-4995-A6C7-8C7C6E158AA5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ferrero", "Ferrero\Ferrero.csproj", "{CA25E16C-0ED6-4577-9E1C-7B22115DDFFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ferrero.Common", "Ferrero.Common\Ferrero.Common.csproj", "{D1F53332-C486-4419-90D4-E179B55E8FF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,8 +63,23 @@ Global
 		{CA25E16C-0ED6-4577-9E1C-7B22115DDFFD}.Release|Mixed Platforms.Build.0 = Release|x86
 		{CA25E16C-0ED6-4577-9E1C-7B22115DDFFD}.Release|x86.ActiveCfg = Release|x86
 		{CA25E16C-0ED6-4577-9E1C-7B22115DDFFD}.Release|x86.Build.0 = Release|x86
+		{D1F53332-C486-4419-90D4-E179B55E8FF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1F53332-C486-4419-90D4-E179B55E8FF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1F53332-C486-4419-90D4-E179B55E8FF1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D1F53332-C486-4419-90D4-E179B55E8FF1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D1F53332-C486-4419-90D4-E179B55E8FF1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D1F53332-C486-4419-90D4-E179B55E8FF1}.Debug|x86.Build.0 = Debug|Any CPU
+		{D1F53332-C486-4419-90D4-E179B55E8FF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1F53332-C486-4419-90D4-E179B55E8FF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1F53332-C486-4419-90D4-E179B55E8FF1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D1F53332-C486-4419-90D4-E179B55E8FF1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D1F53332-C486-4419-90D4-E179B55E8FF1}.Release|x86.ActiveCfg = Release|Any CPU
+		{D1F53332-C486-4419-90D4-E179B55E8FF1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7D43DB5D-C30F-4AAF-AE28-5749CDE45EE9}
 	EndGlobalSection
 EndGlobal

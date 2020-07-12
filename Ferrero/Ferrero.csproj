@@ -113,6 +113,12 @@
     <Compile Include="frmMain.designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmSheetsSelecter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmSheetsSelecter.Designer.cs">
+      <DependentUpon>FrmSheetsSelecter.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -132,6 +138,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmSheetsSelecter.resx">
+      <DependentUpon>FrmSheetsSelecter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -160,6 +169,10 @@
     <ProjectReference Include="..\Ferrero.BLL\Ferrero.BLL.csproj">
       <Project>{1E509982-4C4D-4995-A6C7-8C7C6E158AA5}</Project>
       <Name>Ferrero.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ferrero.Common\Ferrero.Common.csproj">
+      <Project>{D1F53332-C486-4419-90D4-E179B55E8FF1}</Project>
+      <Name>Ferrero.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ferrero.Model\Ferrero.Model.csproj">
       <Project>{55758D74-C3D7-4CE8-8C84-A07E9B60CB9A}</Project>
