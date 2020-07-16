@@ -110,11 +110,12 @@
             this.ExpandableSplitter1.HotGripDarkColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBorder;
             this.ExpandableSplitter1.HotGripLightColor = System.Drawing.Color.FromArgb(((int)(((byte)(188)))), ((int)(((byte)(199)))), ((int)(((byte)(216)))));
             this.ExpandableSplitter1.HotGripLightColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground;
-            this.ExpandableSplitter1.Location = new System.Drawing.Point(213, 26);
+            this.ExpandableSplitter1.Location = new System.Drawing.Point(426, 43);
+            this.ExpandableSplitter1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.ExpandableSplitter1.MinExtra = 50;
             this.ExpandableSplitter1.MinSize = 0;
             this.ExpandableSplitter1.Name = "ExpandableSplitter1";
-            this.ExpandableSplitter1.Size = new System.Drawing.Size(10, 493);
+            this.ExpandableSplitter1.Size = new System.Drawing.Size(20, 1000);
             this.ExpandableSplitter1.Style = DevComponents.DotNetBar.eSplitterStyle.Office2007;
             this.ExpandableSplitter1.TabIndex = 10;
             this.ExpandableSplitter1.TabStop = false;
@@ -132,7 +133,8 @@
             this.AdvTree1.Dock = System.Windows.Forms.DockStyle.Left;
             this.AdvTree1.Font = new System.Drawing.Font("宋体", 12F);
             this.AdvTree1.HotTracking = true;
-            this.AdvTree1.Location = new System.Drawing.Point(0, 26);
+            this.AdvTree1.Location = new System.Drawing.Point(0, 43);
+            this.AdvTree1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.AdvTree1.Name = "AdvTree1";
             this.AdvTree1.Nodes.AddRange(new DevComponents.AdvTree.Node[] {
             this.Node5,
@@ -142,7 +144,7 @@
             this.AdvTree1.NodesConnector = this.NodeConnector1;
             this.AdvTree1.NodeStyle = this.ElementStyle1;
             this.AdvTree1.PathSeparator = ";";
-            this.AdvTree1.Size = new System.Drawing.Size(213, 493);
+            this.AdvTree1.Size = new System.Drawing.Size(426, 1000);
             this.AdvTree1.Styles.Add(this.ElementStyle1);
             this.AdvTree1.TabIndex = 9;
             this.AdvTree1.Text = "AdvTree1";
@@ -297,10 +299,10 @@
             // 
             this.dockSite4.AccessibleRole = System.Windows.Forms.AccessibleRole.Window;
             this.dockSite4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dockSite4.Location = new System.Drawing.Point(0, 519);
-            this.dockSite4.Margin = new System.Windows.Forms.Padding(2);
+            this.dockSite4.Location = new System.Drawing.Point(0, 1043);
+            this.dockSite4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dockSite4.Name = "dockSite4";
-            this.dockSite4.Size = new System.Drawing.Size(688, 0);
+            this.dockSite4.Size = new System.Drawing.Size(1376, 0);
             this.dockSite4.TabIndex = 32;
             this.dockSite4.TabStop = false;
             // 
@@ -308,10 +310,10 @@
             // 
             this.dockSite1.AccessibleRole = System.Windows.Forms.AccessibleRole.Window;
             this.dockSite1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.dockSite1.Location = new System.Drawing.Point(0, 26);
-            this.dockSite1.Margin = new System.Windows.Forms.Padding(2);
+            this.dockSite1.Location = new System.Drawing.Point(0, 43);
+            this.dockSite1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dockSite1.Name = "dockSite1";
-            this.dockSite1.Size = new System.Drawing.Size(0, 493);
+            this.dockSite1.Size = new System.Drawing.Size(0, 1000);
             this.dockSite1.TabIndex = 29;
             this.dockSite1.TabStop = false;
             // 
@@ -319,10 +321,10 @@
             // 
             this.dockSite2.AccessibleRole = System.Windows.Forms.AccessibleRole.Window;
             this.dockSite2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.dockSite2.Location = new System.Drawing.Point(688, 26);
-            this.dockSite2.Margin = new System.Windows.Forms.Padding(2);
+            this.dockSite2.Location = new System.Drawing.Point(1376, 43);
+            this.dockSite2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dockSite2.Name = "dockSite2";
-            this.dockSite2.Size = new System.Drawing.Size(0, 493);
+            this.dockSite2.Size = new System.Drawing.Size(0, 1000);
             this.dockSite2.TabIndex = 30;
             this.dockSite2.TabStop = false;
             // 
@@ -330,10 +332,10 @@
             // 
             this.dockSite3.AccessibleRole = System.Windows.Forms.AccessibleRole.Window;
             this.dockSite3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.dockSite3.Location = new System.Drawing.Point(0, 26);
-            this.dockSite3.Margin = new System.Windows.Forms.Padding(2);
+            this.dockSite3.Location = new System.Drawing.Point(0, 43);
+            this.dockSite3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dockSite3.Name = "dockSite3";
-            this.dockSite3.Size = new System.Drawing.Size(688, 0);
+            this.dockSite3.Size = new System.Drawing.Size(1376, 0);
             this.dockSite3.TabIndex = 31;
             this.dockSite3.TabStop = false;
             // 
@@ -352,10 +354,10 @@
             this.mnuHelp,
             this.mnuStyle});
             this.barMenu.Location = new System.Drawing.Point(0, 0);
-            this.barMenu.Margin = new System.Windows.Forms.Padding(2);
+            this.barMenu.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.barMenu.MenuBar = true;
             this.barMenu.Name = "barMenu";
-            this.barMenu.Size = new System.Drawing.Size(688, 26);
+            this.barMenu.Size = new System.Drawing.Size(1376, 43);
             this.barMenu.Stretch = true;
             this.barMenu.Style = DevComponents.DotNetBar.eDotNetBarStyle.Windows7;
             this.barMenu.TabIndex = 0;
@@ -494,12 +496,12 @@
             this.tabControl1.CloseButtonPosition = DevComponents.DotNetBar.eTabCloseButtonPosition.Right;
             this.tabControl1.CloseButtonVisible = true;
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(223, 26);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
+            this.tabControl1.Location = new System.Drawing.Point(446, 43);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedTabFont = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold);
+            this.tabControl1.SelectedTabFont = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabControl1.SelectedTabIndex = -1;
-            this.tabControl1.Size = new System.Drawing.Size(465, 493);
+            this.tabControl1.Size = new System.Drawing.Size(930, 1000);
             this.tabControl1.Style = DevComponents.DotNetBar.eTabStripStyle.Office2007Document;
             this.tabControl1.TabIndex = 27;
             this.tabControl1.TabLayoutType = DevComponents.DotNetBar.eTabLayoutType.FixedWithNavigationBox;
@@ -513,10 +515,10 @@
             this.barStatus.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.barStatus.Items.AddRange(new DevComponents.DotNetBar.BaseItem[] {
             this.labelItem1});
-            this.barStatus.Location = new System.Drawing.Point(0, 519);
-            this.barStatus.Margin = new System.Windows.Forms.Padding(2);
+            this.barStatus.Location = new System.Drawing.Point(0, 1043);
+            this.barStatus.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.barStatus.Name = "barStatus";
-            this.barStatus.Size = new System.Drawing.Size(688, 22);
+            this.barStatus.Size = new System.Drawing.Size(1376, 39);
             this.barStatus.Stretch = true;
             this.barStatus.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.barStatus.TabIndex = 33;
@@ -529,9 +531,9 @@
             // 
             // frmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(688, 541);
+            this.ClientSize = new System.Drawing.Size(1376, 1082);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.ExpandableSplitter1);
             this.Controls.Add(this.AdvTree1);
@@ -544,7 +546,9 @@
             this.DoubleBuffered = true;
             this.EnableGlass = false;
             this.FlattenMDIBorder = false;
+            this.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.IsMdiContainer = true;
+            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.Name = "frmMain";
             this.Text = "ERP数据转换系统";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;

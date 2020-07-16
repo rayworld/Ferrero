@@ -4,6 +4,7 @@ using System.Text;
 using System.Data.SqlClient;
 
 using Ray.Framework.DBUtility;//Please add references
+using Ray.Framework.Encrypt;
 
 namespace Ferrero.DAL
 {
@@ -12,6 +13,7 @@ namespace Ferrero.DAL
 	/// </summary>
 	public partial class ICInventoryRepository
 	{
+
         
 		public ICInventoryRepository()
 		{}
@@ -306,6 +308,7 @@ namespace Ferrero.DAL
             object obj = SqlHelper.GetSingle(SqlHelper.GetConnectionString(sConnectionName), strSql.ToString());
             return obj;
         }
+
         #endregion  ExtensionMethod
 	}
 }

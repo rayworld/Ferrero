@@ -18,13 +18,15 @@ namespace Ferrero
         public string UserName { get; set; }
         //子公司名称
         public string SubCompany{get;set;}
-        //数据库连接名称
-        string sConnectionName = "";
         
-        public Form1(string userName222, string subCompany)
+        //数据库连接名称
+        public string sConnectionString { get; set; }
+        
+        public Form1(string userName222, string subCompany, string connectionString)
         {
             this.UserName = userName222;
             this.SubCompany = subCompany;
+            this.sConnectionString = connectionString;
             InitializeComponent();
         }
 
@@ -59,7 +61,7 @@ namespace Ferrero
         /// <param name="e"></param>
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            frmDelateConfirm frm = new frmDelateConfirm(1, sConnectionName);
+            frmDelateConfirm frm = new frmDelateConfirm(1, sConnectionString);
             frm.ShowDialog();
         }
 
@@ -72,7 +74,7 @@ namespace Ferrero
         {
             btnDelete.Visible = (UserName.ToLower() == "administrator") ? true : false;
 
-            sConnectionName = SubCompany == "" ? "" : SubCompany;
+            //sConnectionString = SubCompany == "" ? "" : SubCompany;
 
         }
 
@@ -139,6 +141,7 @@ namespace Ferrero
                     "系统错误",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+                return;
             }
 
             if (dt != null && dt.Rows.Count > 0)
@@ -219,13 +222,13 @@ namespace Ferrero
 
                 //单位编号
                 string strUnit = dt.Rows[i]["单位"].ToString();
-                if (bStockBillEntry.GetUnitID(sConnectionName,strUnit) == 0)
+                if (bStockBillEntry.GetUnitID(sConnectionString,strUnit) == 0)
                 {
                     dataGridView1.Rows[i].Cells["单位"].Style.BackColor = Color.Red;
                     ierrData++;
                 }
 
-                if (bStockBillEntry.checkProductID(sConnectionName,productCode, productName) == false)
+                if (bStockBillEntry.checkProductID(sConnectionString,productCode, productName) == false)
                 {
                     dataGridView1.Rows[i].Cells["商品长代码"].Style.BackColor = Color.Red;
                     ierrData++;
@@ -260,7 +263,7 @@ namespace Ferrero
                 ICStockBill mICStockBill = new ICStockBill();
 
                 //商品代码
-                int fItemID = bICStockBillEntry.GetfItemId(sConnectionName, dt.Rows[i]["商品长代码"].ToString());
+                int fItemID = bICStockBillEntry.GetfItemId(sConnectionString, dt.Rows[i]["商品长代码"].ToString());
                 if (fItemID > 0)
                 {
                     if (fBillNo != dt.Rows[i]["单据编号"].ToString())
@@ -269,9 +272,9 @@ namespace Ferrero
                         mICStockBill.FBillNo = dt.Rows[i]["单据编号"].ToString();
                         fBillNo = mICStockBill.FBillNo;
                         //内联编号
-                        ///fInterID  = bICStockBill.GetMaxFInterID(sConnectionName);
-                        bICStockBill.UpdateFInterID(sConnectionName);
-                        mICStockBill.FInterID = bICStockBill.GetMaxFInterID(sConnectionName);
+                        ///fInterID  = bICStockBill.GetMaxFInterID(sConnectionString);
+                        bICStockBill.UpdateFInterID(sConnectionString);
+                        mICStockBill.FInterID = bICStockBill.GetMaxFInterID(sConnectionString);
 
                         //fROB
                         mICStockBill.FROB = decimal.Parse(dt.Rows[i]["实收数量"].ToString()) > 0 ? 1 : -1;
@@ -286,11 +289,11 @@ namespace Ferrero
                         mICStockBill.FBillerID = 16394;
 
 
-                        ///if (InsertStockBill(sConnectionName, fInterID, fBillNo, fdate, frob) == true && bStockBill.UpdateFInterID(sConnectionName) == true && bStockBill.UpdateFBillNo(sConnectionName,iBillNo + 1, "WIN+" + iBillNo.ToString().PadLeft(6, '0'), 1) == true)
+                        ///if (InsertStockBill(sConnectionString, fInterID, fBillNo, fdate, frob) == true && bStockBill.UpdateFInterID(sConnectionString) == true && bStockBill.UpdateFBillNo(sConnectionString,iBillNo + 1, "WIN+" + iBillNo.ToString().PadLeft(6, '0'), 1) == true)
                         try
                         {
-                            retVal = bICStockBill.Add(sConnectionName, mICStockBill);
-                            //bICStockBill.UpdateFInterID(sConnectionName);
+                            retVal = bICStockBill.Add(sConnectionString, mICStockBill);
+                            //bICStockBill.UpdateFInterID(sConnectionString);
                         }
                         catch (Exception ex)
                         {
@@ -309,7 +312,7 @@ namespace Ferrero
                     ICStockBillEntry mICStockBillEntry = new ICStockBillEntry();
                     //SetPropertyDefaultValue4Detail(mICStockBillEntry);
                     ///内联ID
-                    mICStockBillEntry.FInterID = bICStockBill.GetMaxFInterID(sConnectionName);
+                    mICStockBillEntry.FInterID = bICStockBill.GetMaxFInterID(sConnectionString);
                     //数量
                     mICStockBillEntry.FQty = decimal.Parse(dt.Rows[i]["基本单位实收数量"].ToString());
                     //金额
@@ -317,11 +320,11 @@ namespace Ferrero
                     //价格
                     mICStockBillEntry.FPrice = mICStockBillEntry.FAmount / mICStockBillEntry.FQty;
                     //仓库ID
-                    mICStockBillEntry.FDCStockID = bICStockBill.GetStockId(sConnectionName, dt.Rows[i]["收料仓库"].ToString());
+                    mICStockBillEntry.FDCStockID = bICStockBill.GetStockId(sConnectionString, dt.Rows[i]["收料仓库"].ToString());
                     //批号
                     mICStockBillEntry.FBatchNo = dt.Rows[i]["批号"].ToString();
                     //单位编号
-                    mICStockBillEntry.FUnitID = bICStockBillEntry.GetUnitID(sConnectionName, dt.Rows[i]["单位"].ToString());//单位ID
+                    mICStockBillEntry.FUnitID = bICStockBillEntry.GetUnitID(sConnectionString, dt.Rows[i]["单位"].ToString());//单位ID
                     //商品编号
                     mICStockBillEntry.FItemID = fItemID;
                     //输入单价
@@ -356,7 +359,7 @@ namespace Ferrero
                     //写Detail表
                     try
                     {
-                        retVal = bICStockBillEntry.Add(sConnectionName, mICStockBillEntry);
+                        retVal = bICStockBillEntry.Add(sConnectionString, mICStockBillEntry);
                     }
                     catch (Exception ex)
                     {
@@ -409,7 +412,7 @@ namespace Ferrero
                 ICStockBill mICStockBill = new ICStockBill();
 
                 //商品代码
-                int fItemID = bICStockBillEntry.GetfItemId(sConnectionName, dt.Rows[i]["商品长代码"].ToString());
+                int fItemID = bICStockBillEntry.GetfItemId(sConnectionString, dt.Rows[i]["商品长代码"].ToString());
                 if (fItemID > 0)
                 {
                     if (fBillNo != dt.Rows[i]["单据编号"].ToString())
@@ -418,9 +421,9 @@ namespace Ferrero
                         mICStockBill.FBillNo = dt.Rows[i]["单据编号"].ToString();
                         fBillNo = mICStockBill.FBillNo;
                         //内联编号
-                        ///fInterID  = bICStockBill.GetMaxFInterID(sConnectionName);
-                        bICStockBill.UpdateFInterID(sConnectionName);
-                        mICStockBill.FInterID = bICStockBill.GetMaxFInterID(sConnectionName);
+                        ///fInterID  = bICStockBill.GetMaxFInterID(sConnectionString);
+                        bICStockBill.UpdateFInterID(sConnectionString);
+                        mICStockBill.FInterID = bICStockBill.GetMaxFInterID(sConnectionString);
 
                         //fROB
                         mICStockBill.FROB = decimal.Parse(dt.Rows[i]["实收数量"].ToString()) > 0 ? 1 : -1;
@@ -452,11 +455,11 @@ namespace Ferrero
                         }
 
 
-                        ///if (InsertStockBill(sConnectionName, fInterID, fBillNo, fdate, frob) == true && bStockBill.UpdateFInterID(sConnectionName) == true && bStockBill.UpdateFBillNo(sConnectionName,iBillNo + 1, "WIN+" + iBillNo.ToString().PadLeft(6, '0'), 1) == true)
+                        ///if (InsertStockBill(sConnectionString, fInterID, fBillNo, fdate, frob) == true && bStockBill.UpdateFInterID(sConnectionString) == true && bStockBill.UpdateFBillNo(sConnectionString,iBillNo + 1, "WIN+" + iBillNo.ToString().PadLeft(6, '0'), 1) == true)
                         try
                         {
-                            retVal = bICStockBill.Add(sConnectionName, mICStockBill);
-                            //bICStockBill.UpdateFInterID(sConnectionName);
+                            retVal = bICStockBill.Add(sConnectionString, mICStockBill);
+                            //bICStockBill.UpdateFInterID(sConnectionString);
                         }
                         catch (Exception ex)
                         {
@@ -475,7 +478,7 @@ namespace Ferrero
                     ICStockBillEntry mICStockBillEntry = new ICStockBillEntry();
                     //SetPropertyDefaultValue4Detail(mICStockBillEntry);
                     ///内联ID
-                    mICStockBillEntry.FInterID = bICStockBill.GetMaxFInterID(sConnectionName);
+                    mICStockBillEntry.FInterID = bICStockBill.GetMaxFInterID(sConnectionString);
                     //数量
                     mICStockBillEntry.FQty = decimal.Parse(dt.Rows[i]["基本单位实收数量"].ToString());
                     //金额
@@ -483,11 +486,11 @@ namespace Ferrero
                     //价格
                     mICStockBillEntry.FPrice = mICStockBillEntry.FAmount / mICStockBillEntry.FQty;
                     //仓库ID
-                    mICStockBillEntry.FDCStockID = bICStockBill.GetStockId(sConnectionName, dt.Rows[i]["收料仓库"].ToString());
+                    mICStockBillEntry.FDCStockID = bICStockBill.GetStockId(sConnectionString, dt.Rows[i]["收料仓库"].ToString());
                     //批号
                     mICStockBillEntry.FBatchNo = dt.Rows[i]["批号"].ToString();
                     //单位编号
-                    mICStockBillEntry.FUnitID = bICStockBillEntry.GetUnitID(sConnectionName, dt.Rows[i]["单位"].ToString());//单位ID
+                    mICStockBillEntry.FUnitID = bICStockBillEntry.GetUnitID(sConnectionString, dt.Rows[i]["单位"].ToString());//单位ID
                     //商品编号
                     mICStockBillEntry.FItemID = fItemID;
                     //输入单价
@@ -522,7 +525,7 @@ namespace Ferrero
                     //写Detail表
                     try
                     {
-                        retVal = bICStockBillEntry.Add(sConnectionName, mICStockBillEntry);
+                        retVal = bICStockBillEntry.Add(sConnectionString, mICStockBillEntry);
                     }
                     catch (Exception ex)
                     {

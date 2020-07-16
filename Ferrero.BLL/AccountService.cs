@@ -19,9 +19,9 @@ namespace Ferrero.BLL
         /// <summary>
         /// 获得数据列表
         /// </summary>
-        public bool UserLogin(string sConnectionName, string fName, string FPassword)
+        public bool UserLogin(string sConnectionString, string fName, string FPassword)
         {
-            return dal.UserLogin(sConnectionName, fName, FPassword) > 0 ? true : false;
+            return dal.UserLogin(sConnectionString, fName, FPassword) > 0 ? true : false;
             //return true;
         }
 

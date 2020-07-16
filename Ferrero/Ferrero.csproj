@@ -64,6 +64,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\Ray.Framework.Converter.dll</HintPath>
     </Reference>
+    <Reference Include="Ray.Framework.DBUtility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Ray.Framework.DBUtility.dll</HintPath>
+    </Reference>
     <Reference Include="Ray.Framework.Encrypt, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\Ray.Framework.Encrypt.dll</HintPath>
@@ -167,7 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ferrero.BLL\Ferrero.BLL.csproj">
-      <Project>{1E509982-4C4D-4995-A6C7-8C7C6E158AA5}</Project>
+      <Project>{1e509982-4c4d-4995-a6c7-8c7c6e158aa5}</Project>
       <Name>Ferrero.BLL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ferrero.Common\Ferrero.Common.csproj">

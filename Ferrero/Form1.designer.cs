@@ -30,11 +30,8 @@
         {
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.bar1 = new DevComponents.DotNetBar.Bar();
-            this.btnOpenExcel = new DevComponents.DotNetBar.ButtonItem();
-            this.btnCheck = new DevComponents.DotNetBar.ButtonItem();
-            this.btnImport = new DevComponents.DotNetBar.ButtonItem();
-            this.btnDelete = new DevComponents.DotNetBar.ButtonItem();
             this.biImporData = new DevComponents.DotNetBar.ButtonItem();
+            this.btnDelete = new DevComponents.DotNetBar.ButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bar1)).BeginInit();
             this.SuspendLayout();
@@ -48,6 +45,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(0, 52);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dataGridView1.RowTemplate.Height = 27;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(1371, 1122);
@@ -61,11 +59,8 @@
             this.bar1.Dock = System.Windows.Forms.DockStyle.Top;
             this.bar1.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bar1.Items.AddRange(new DevComponents.DotNetBar.BaseItem[] {
-            this.btnOpenExcel,
-            this.btnCheck,
-            this.btnImport,
-            this.btnDelete,
-            this.biImporData});
+            this.biImporData,
+            this.btnDelete});
             this.bar1.Location = new System.Drawing.Point(0, 0);
             this.bar1.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.bar1.Name = "bar1";
@@ -76,32 +71,17 @@
             this.bar1.TabStop = false;
             this.bar1.Text = "bar1";
             // 
-            // btnOpenExcel
+            // biImporData
             // 
-            this.btnOpenExcel.Name = "btnOpenExcel";
-            this.btnOpenExcel.Text = "打开(&O)";
-            // 
-            // btnCheck
-            // 
-            this.btnCheck.Name = "btnCheck";
-            this.btnCheck.Text = "导入测试(&T)";
-            // 
-            // btnImport
-            // 
-            this.btnImport.Name = "btnImport";
-            this.btnImport.Text = "导入入库单(&I)";
+            this.biImporData.Name = "biImporData";
+            this.biImporData.Text = "导入入库单";
+            this.biImporData.Click += new System.EventHandler(this.biImporData_Click);
             // 
             // btnDelete
             // 
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Text = "删除历史数据(&D)";
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
-            // 
-            // biImporData
-            // 
-            this.biImporData.Name = "biImporData";
-            this.biImporData.Text = "导入入库单";
-            this.biImporData.Click += new System.EventHandler(this.biImporData_Click);
             // 
             // Form1
             // 
@@ -126,9 +106,6 @@
 
         private System.Windows.Forms.DataGridView dataGridView1;
         private DevComponents.DotNetBar.Bar bar1;
-        private DevComponents.DotNetBar.ButtonItem btnOpenExcel;
-        private DevComponents.DotNetBar.ButtonItem btnImport;
-        private DevComponents.DotNetBar.ButtonItem btnCheck;
         private DevComponents.DotNetBar.ButtonItem btnDelete;
         private DevComponents.DotNetBar.ButtonItem biImporData;
     }

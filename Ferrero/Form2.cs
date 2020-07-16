@@ -4,8 +4,8 @@ using System.Data.OleDb;
 using System.Drawing;
 using System.Windows.Forms;
 using DevComponents.DotNetBar;
-
 using Ferrero.BLL;
+using Ferrero.Common;
 using Ferrero.Model;
 using Ray.Framework.Converter;
     
@@ -14,58 +14,33 @@ namespace Ferrero
     public partial class Form2 :Office2007Form   
     {
         DataTable dt = new DataTable();
+        
+        /// <summary>
+        /// 用户名
+        /// </summary>
         public string UserName { get; set; }
+
+        /// <summary>
+        /// 分公司名
+        /// </summary>
         public string SubCompany { get; set; }
-        string sConnectionName = "";
+        
+        /// <summary>
+        /// 服务器连接信息
+        /// </summary>
+        public string sConnectionString { get; set; }
         bool retVal = false;
 
 
-        public Form2(string userName111,string subCompany)
+        public Form2(string userName111,string subCompany,string connectionString)
         {
             this.UserName = userName111;
             this.SubCompany = subCompany;
+            this.sConnectionString = connectionString;
             InitializeComponent();
         }
 
         #region 事件
-        /// <summary>
-        /// 打开Ferrero销售出库Excel文件
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnOpen_Click(object sender, EventArgs e)
-        {
-            Excel2DataTable common = new Excel2DataTable();
-            ///将Excel文件转成DataTable
-            dt = common.ExcelFile2DataTable();
-            if (dt != null)
-            {
-                if (dt.Rows.Count > 0)
-                {
-                    ///去掉统计行
-                    dt.Rows.RemoveAt(index: dt.Rows.Count - 1);
-                    dataGridView1.DataSource = dt;
-                    ///检查系统所需要的列是否存在
-                    if (SubCompany.ToLower() == "wuhan")
-                    {
-                            common.ChkColumnsName(new string[] {
-                        "单据编号", "日期","发货仓库","销售单价","购货单位代码","订单号","基本单位实发数量",
-                        "进货单号","验收单号","订单日期","交货日期","审核日期A","产品长代码",
-                        "实发数量","销售单价", "销售金额","批号","单位","F件数","F含量",
-                        "F细数","F赠品","F税率","F未税金额","F价税合计","F保质日期","F生产日期",
-                        "F单位","F规格","F商品","F包装","F箱数","F零头","F税额","F售价"
-                        }, dt);
-                    }
-                    else
-                    {
-                        common.ChkColumnsName(new string[] {
-                        "单据编号", "日期","发货仓库","销售单价","购货单位代码","订单号","基本单位实发数量",
-                        "产品长代码","实发数量","销售单价", "销售金额","批号","单位"
-                        }, dt);
-                    }    
-                }
-            }
-        }
 
         /// <summary>
         /// 
@@ -76,10 +51,10 @@ namespace Ferrero
         {
             btnDelete.Visible = (UserName.ToLower() == "administrator") ? true : false;
 
-            if (SubCompany != "" && SubCompany != null)
-            {
-                sConnectionName = SubCompany;
-            }
+            //if (SubCompany != "" && SubCompany != null)
+            //{
+            //    sConnectionString = SubCompany;
+            //}
         }
 
         /// <summary>
@@ -89,40 +64,135 @@ namespace Ferrero
         /// <param name="e"></param>
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            frmDelateConfirm frm = new frmDelateConfirm(21, sConnectionName);
+            frmDelateConfirm frm = new frmDelateConfirm(21, sConnectionString);
             if (frm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 //Delete data
             }
         }
 
-        private void biCheckImport_Click(object sender, EventArgs e)
+        private void biImport_Click(object sender, EventArgs e)
         {
-            //1、确定Excel文件完整性
-            if (dt != null && dt.Rows.Count > 0)
+            OpenFileDialog openFileDialog = new OpenFileDialog()
             {
-                //2、检查数据完整性
-                int CheckResult = checkData(dt);
-                if (CheckResult == 0)
+                Filter = "Microsoft Excel 文件|*.xlsx;*.xls|所有文件|*.*"
+            };
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(openFileDialog.FileName))
+            {
+                string[] SheetNames = ExcelHelper.GetExcelSheetNames(openFileDialog.FileName);
+                if (SheetNames != null && SheetNames.Length > 1)//Excel有不只一个sheet，弹出选择窗口
                 {
-                    //3、导入数据
-                    if (SubCompany.ToLower() == "wuhan")
+                    FrmSheetsSelecter frmSheetsSelecter = new FrmSheetsSelecter();
+                    frmSheetsSelecter.SheetList = SheetNames;
+                    if (frmSheetsSelecter.ShowDialog() != DialogResult.Retry)
                     {
-                        Excel2DB(dt);
+                        if (frmSheetsSelecter.SelectedSheetName != "")
+                        {
+                            dt = ExcelHelper.LoadDataFromExcel(openFileDialog.FileName, frmSheetsSelecter.SelectedSheetName);
+                        }
+                        else
+                        {
+                            dt = (DataTable)null;
+                            dataGridView1.DataSource = dt;
+                            MessageBox.Show("请先选择一个工作簿",
+                                "系统错误",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Stop);
+                            return;
+                        }
                     }
-                    else
-                    {
-                        Excel2DB1(dt);
-                    }
+                }
+                else if (SheetNames != null && SheetNames.Length == 1)//只有一个sheet
+                {
+                    string SelectedSheetName = SheetNames[0];
+                    dt = ExcelHelper.LoadDataFromExcel(openFileDialog.FileName, SelectedSheetName);
                 }
                 else
                 {
-                    MessageBoxEx.Show(String.Format("总共测试数据 {0} 行，其中测试失败记录有 {1} 项！", dt.Rows.Count, CheckResult));
+                    dt = (DataTable)null;
+                    dataGridView1.DataSource = dt;
+                    MessageBox.Show("打开Excel文件出错！",
+                        "系统错误",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    return;
                 }
             }
             else
             {
-                MessageBox.Show("请先打开Excel文件！");
+                dt = (DataTable)null;
+                dataGridView1.DataSource = dt;
+                MessageBox.Show("请先打开Excel文件或者文件出错！",
+                    "系统错误",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                ///去掉统计行
+                dt.Rows.RemoveAt(index: dt.Rows.Count - 1);
+                //绑定、显示数据
+                dataGridView1.DataSource = dt;
+                //1、检查Excel文件中列完整性
+                string[] whColumns = new string[] {
+                        "单据编号", "日期","发货仓库","销售单价","购货单位代码","订单号","基本单位实发数量",
+                        "进货单号","验收单号","订单日期","交货日期","审核日期A","产品长代码",
+                        "实发数量","销售单价", "销售金额","批号","单位","F件数","F含量",
+                        "F细数","F赠品","F税率","F未税金额","F价税合计","F保质日期","F生产日期",
+                        "F单位","F规格","F商品","F包装","F箱数","F零头","F税额","F售价"
+                        };
+                string[] jzColumns = new string[] {
+                        "单据编号", "日期","发货仓库","销售单价","购货单位代码","订单号","基本单位实发数量",
+                        "产品长代码","实发数量","销售单价", "销售金额","批号","单位"
+                        };
+                string[] chkColumn = SubCompany.ToLower() == "wuhan" ? whColumns : jzColumns; 
+                string ErrMsg = ExcelHelper.ChkColumnsName(chkColumn, dt);
+                if (ErrMsg == "")
+                {
+                    //2、检查数据完整性
+                    int ErrCount = checkData(dt);
+                    if (ErrCount == 0)
+                    {
+                        //3、导入数据
+                        if (SubCompany.ToLower() == "wuhan")
+                        {
+                            Excel2DB(dt);
+                        }
+                        else
+                        {
+                            Excel2DB1(dt);
+                        }
+                    }
+                    else
+                    {
+                        MessageBoxEx.Show(String.Format("总共测试数据 {0} 行，其中测试失败记录有 {1} 项！", dt.Rows.Count, ErrCount),
+                            "系统提示",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Stop);
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("请检查Excel文件，不存在的字段有:" + ErrMsg.Substring(0, ErrMsg.Length - 1),
+                        "系统提示",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Stop);
+                    return;
+                }
+            }
+            else
+            {
+                dt = (DataTable)null;
+                dataGridView1.DataSource = dt;
+                MessageBox.Show(" 打开Excel文件失败或无数据",
+                    "系统提示",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Stop);
+                return;
             }
         }
 
@@ -150,7 +220,7 @@ namespace Ferrero
             {
                 ICStockBill mICStockBill = new ICStockBill();
                 //产品代码
-                int fItemID = bICStockBillEntry.GetfItemId(sConnectionName, dt.Rows[i]["产品长代码"].ToString());
+                int fItemID = bICStockBillEntry.GetfItemId(sConnectionString, dt.Rows[i]["产品长代码"].ToString());
                 if (fItemID > 0)
                 {
                     if (fBillNo != dt.Rows[i]["单据编号"].ToString())
@@ -159,15 +229,15 @@ namespace Ferrero
                         mICStockBill.FBillNo = dt.Rows[i]["单据编号"].ToString();
                         fBillNo = mICStockBill.FBillNo;
                         //内联编号
-                        bICStockBill.UpdateFInterID(sConnectionName);
-                        mICStockBill.FInterID = bICStockBill.GetMaxFInterID(sConnectionName);
+                        bICStockBill.UpdateFInterID(sConnectionString);
+                        mICStockBill.FInterID = bICStockBill.GetMaxFInterID(sConnectionString);
                         //单据日期
                         mICStockBill.FDate = DateTime.Parse(dt.Rows[i]["日期"].ToString());
                         //红蓝字
                         //mICStockBill.FROB = decimal.Parse(dt.Rows[i]["销售单价"].ToString()) > 0 ? 1 : -1;
                         mICStockBill.FROB = decimal.Parse(dt.Rows[i]["基本单位实发数量"].ToString()) > 0 ? 1 : -1;//2015                        
                         //客户ID
-                        mICStockBill.FSupplyID = bICStockBillEntry.GetSupplyID(sConnectionName, dt.Rows[i]["购货单位代码"].ToString());
+                        mICStockBill.FSupplyID = bICStockBillEntry.GetSupplyID(sConnectionString, dt.Rows[i]["购货单位代码"].ToString());
                         //订单号
                         mICStockBill.FHeadSelfB0146 = dt.Rows[i]["订单号"].ToString();
                         //进货单号 
@@ -210,7 +280,7 @@ namespace Ferrero
 
                         try
                         {
-                             retVal =bICStockBill.Add (sConnectionName,mICStockBill);
+                             retVal =bICStockBill.Add (sConnectionString,mICStockBill);
                         }
                         catch(Exception ex)
                         {
@@ -228,9 +298,9 @@ namespace Ferrero
                     ICStockBillEntry mICStockBillEntry = new ICStockBillEntry();
 
                     ///内联ID
-                    mICStockBillEntry.FInterID = bICStockBill.GetMaxFInterID(sConnectionName);
+                    mICStockBillEntry.FInterID = bICStockBill.GetMaxFInterID(sConnectionString);
                     ///产品编号
-                    mICStockBillEntry.FItemID = bICStockBillEntry.GetfItemId(sConnectionName, dt.Rows[i]["产品长代码"].ToString());
+                    mICStockBillEntry.FItemID = bICStockBillEntry.GetfItemId(sConnectionString, dt.Rows[i]["产品长代码"].ToString());
                     ///实发数量
                     mICStockBillEntry.FQty = decimal.Parse(dt.Rows[i]["基本单位实发数量"].ToString());
                     ///销售单价
@@ -240,7 +310,7 @@ namespace Ferrero
                     ///批号
                     mICStockBillEntry.FBatchNo = dt.Rows[i]["批号"].ToString();
                     ///单位
-                    mICStockBillEntry.FUnitID = bICStockBillEntry.GetUnitID(sConnectionName, dt.Rows[i]["单位"].ToString()); 
+                    mICStockBillEntry.FUnitID = bICStockBillEntry.GetUnitID(sConnectionString, dt.Rows[i]["单位"].ToString()); 
                     ///行号
                     mICStockBillEntry.FEntryID = fEntryID ;
                     //F件数
@@ -288,14 +358,14 @@ namespace Ferrero
                     //销售金额
                     mICStockBillEntry.FConsignAmount = decimal.Parse(dt.Rows[i]["销售金额"].ToString());
                     //发货仓库
-                    mICStockBillEntry.FDCStockID = bICStockBill.GetStockId(sConnectionName, dt.Rows[i]["发货仓库"].ToString());
+                    mICStockBillEntry.FDCStockID = bICStockBill.GetStockId(sConnectionString, dt.Rows[i]["发货仓库"].ToString());
 
                     //如果销售商编号在列表中也有记录
                     ///Raysoft.Common.Excel2DataTable common = new Excel2DataTable();
                     ///if (common.bIsSpecialCustom(dt.Rows[i]["购货单位代码"].ToString()) == false)
                     ///{
                     ///    //价格取列表中的价格
-                    ///    mICStockBillEntry.FPrice = bICStockBillEntry.getSpecialUnitPriceByLongCode(sConnectionName, dt.Rows[i]["产品长代码"].ToString());
+                    ///    mICStockBillEntry.FPrice = bICStockBillEntry.getSpecialUnitPriceByLongCode(sConnectionString, dt.Rows[i]["产品长代码"].ToString());
                     ///    //金额等于价格X数量
                     ///    mICStockBillEntry.FAmount = mICStockBillEntry.FPrice * mICStockBillEntry.FQty;
                     ///}
@@ -305,7 +375,7 @@ namespace Ferrero
                     //写Detail表
                     try
                     {
-                        retVal = bICStockBillEntry.Add(sConnectionName, mICStockBillEntry);
+                        retVal = bICStockBillEntry.Add(sConnectionString, mICStockBillEntry);
                     }
                     catch (Exception ex)
                     {
@@ -349,7 +419,7 @@ namespace Ferrero
             {
                 ICStockBill mICStockBill = new ICStockBill();
                 //产品代码
-                int fItemID = bICStockBillEntry.GetfItemId(sConnectionName, dt.Rows[i]["产品长代码"].ToString());
+                int fItemID = bICStockBillEntry.GetfItemId(sConnectionString, dt.Rows[i]["产品长代码"].ToString());
                 if (fItemID > 0)
                 {
                     if (fBillNo != dt.Rows[i]["单据编号"].ToString())
@@ -358,15 +428,15 @@ namespace Ferrero
                         mICStockBill.FBillNo = dt.Rows[i]["单据编号"].ToString();
                         fBillNo = mICStockBill.FBillNo;
                         //内联编号
-                        bICStockBill.UpdateFInterID(sConnectionName);
-                        mICStockBill.FInterID = bICStockBill.GetMaxFInterID(sConnectionName);
+                        bICStockBill.UpdateFInterID(sConnectionString);
+                        mICStockBill.FInterID = bICStockBill.GetMaxFInterID(sConnectionString);
                         //单据日期
                         mICStockBill.FDate = DateTime.Parse(dt.Rows[i]["日期"].ToString());
                         //红蓝字
                         //mICStockBill.FROB = decimal.Parse(dt.Rows[i]["销售单价"].ToString()) > 0 ? 1 : -1;
                         mICStockBill.FROB = decimal.Parse(dt.Rows[i]["基本单位实发数量"].ToString()) > 0 ? 1 : -1;//2015                        
                         //客户ID
-                        mICStockBill.FSupplyID = bICStockBillEntry.GetSupplyID(sConnectionName, dt.Rows[i]["购货单位代码"].ToString());
+                        mICStockBill.FSupplyID = bICStockBillEntry.GetSupplyID(sConnectionString, dt.Rows[i]["购货单位代码"].ToString());
                         //订单号
                         mICStockBill.FHeadSelfB0146 = dt.Rows[i]["订单号"].ToString();
                         //进货单号 
@@ -415,7 +485,7 @@ namespace Ferrero
 
                         try
                         {
-                            retVal = bICStockBill.Add(sConnectionName, mICStockBill);
+                            retVal = bICStockBill.Add(sConnectionString, mICStockBill);
                         }
                         catch (Exception ex)
                         {
@@ -433,9 +503,9 @@ namespace Ferrero
                     ICStockBillEntry mICStockBillEntry = new ICStockBillEntry();
 
                     ///内联ID
-                    mICStockBillEntry.FInterID = bICStockBill.GetMaxFInterID(sConnectionName);
+                    mICStockBillEntry.FInterID = bICStockBill.GetMaxFInterID(sConnectionString);
                     ///产品编号
-                    mICStockBillEntry.FItemID = bICStockBillEntry.GetfItemId(sConnectionName, dt.Rows[i]["产品长代码"].ToString());
+                    mICStockBillEntry.FItemID = bICStockBillEntry.GetfItemId(sConnectionString, dt.Rows[i]["产品长代码"].ToString());
                     ///实发数量
                     mICStockBillEntry.FQty = decimal.Parse(dt.Rows[i]["基本单位实发数量"].ToString());
                     ///销售单价
@@ -445,7 +515,7 @@ namespace Ferrero
                     ///批号
                     mICStockBillEntry.FBatchNo = dt.Rows[i]["批号"].ToString();
                     ///单位
-                    mICStockBillEntry.FUnitID = bICStockBillEntry.GetUnitID(sConnectionName, dt.Rows[i]["单位"].ToString());
+                    mICStockBillEntry.FUnitID = bICStockBillEntry.GetUnitID(sConnectionString, dt.Rows[i]["单位"].ToString());
                     ///行号
                     mICStockBillEntry.FEntryID = fEntryID;
                     //F件数
@@ -493,14 +563,14 @@ namespace Ferrero
                     //销售金额
                     mICStockBillEntry.FConsignAmount = decimal.Parse(dt.Rows[i]["销售金额"].ToString());
                     //发货仓库
-                    mICStockBillEntry.FDCStockID = bICStockBill.GetStockId(sConnectionName, dt.Rows[i]["发货仓库"].ToString());
+                    mICStockBillEntry.FDCStockID = bICStockBill.GetStockId(sConnectionString, dt.Rows[i]["发货仓库"].ToString());
 
                     //如果销售商编号在列表中也有记录
                     ///Raysoft.Common.Excel2DataTable common = new Excel2DataTable();
                     ///if (common.bIsSpecialCustom(dt.Rows[i]["购货单位代码"].ToString()) == false)
                     ///{
                     ///    //价格取列表中的价格
-                    ///    mICStockBillEntry.FPrice = bICStockBillEntry.getSpecialUnitPriceByLongCode(sConnectionName, dt.Rows[i]["产品长代码"].ToString());
+                    ///    mICStockBillEntry.FPrice = bICStockBillEntry.getSpecialUnitPriceByLongCode(sConnectionString, dt.Rows[i]["产品长代码"].ToString());
                     ///    //金额等于价格X数量
                     ///    mICStockBillEntry.FAmount = mICStockBillEntry.FPrice * mICStockBillEntry.FQty;
                     ///}
@@ -510,7 +580,7 @@ namespace Ferrero
                     //写Detail表
                     try
                     {
-                        retVal = bICStockBillEntry.Add(sConnectionName, mICStockBillEntry);
+                        retVal = bICStockBillEntry.Add(sConnectionString, mICStockBillEntry);
                     }
                     catch (Exception ex)
                     {
@@ -554,19 +624,19 @@ namespace Ferrero
 
                 //单位编号
                 string strUnit = dt.Rows[i]["单位"].ToString();
-                if (bStockBillEntry.GetUnitID(sConnectionName,strUnit) == 0)
+                if (bStockBillEntry.GetUnitID(sConnectionString,strUnit) == 0)
                 {
                     dataGridView1.Rows[i].Cells["单位"].Style.BackColor = Color.Red;
                     ierrData++;
                 }
 
-                if (bStockBillEntry.CheckSupplyID(sConnectionName,customCode, customName) == false)
+                if (bStockBillEntry.CheckSupplyID(sConnectionString,customCode, customName) == false)
                 {
                     dataGridView1.Rows[i].Cells["购货单位代码"].Style.BackColor = Color.Red;
                     ierrData++;
                 }
 
-                if (bStockBillEntry.checkProductID(sConnectionName,productCode, productName) == false)
+                if (bStockBillEntry.checkProductID(sConnectionString,productCode, productName) == false)
                 {
                     dataGridView1.Rows[i].Cells["产品长代码"].Style.BackColor = Color.Red;
                     ierrData++;
@@ -575,9 +645,50 @@ namespace Ferrero
             return ierrData;
         }
 
+
         #endregion
 
         #region 无用的代码
+
+        ///// <summary>
+        ///// 打开Ferrero销售出库Excel文件
+        ///// </summary>
+        ///// <param name="sender"></param>
+        ///// <param name="e"></param>
+        //private void btnOpen_Click(object sender, EventArgs e)
+        //{
+        //    Excel2DataTable common = new Excel2DataTable();
+        //    ///将Excel文件转成DataTable
+        //    dt = common.ExcelFile2DataTable();
+        //    if (dt != null)
+        //    {
+        //        if (dt.Rows.Count > 0)
+        //        {
+        //            ///去掉统计行
+        //            dt.Rows.RemoveAt(index: dt.Rows.Count - 1);
+        //            dataGridView1.DataSource = dt;
+        //            ///检查系统所需要的列是否存在
+        //            if (SubCompany.ToLower() == "wuhan")
+        //            {
+        //                common.ChkColumnsName(new string[] {
+        //                "单据编号", "日期","发货仓库","销售单价","购货单位代码","订单号","基本单位实发数量",
+        //                "进货单号","验收单号","订单日期","交货日期","审核日期A","产品长代码",
+        //                "实发数量","销售单价", "销售金额","批号","单位","F件数","F含量",
+        //                "F细数","F赠品","F税率","F未税金额","F价税合计","F保质日期","F生产日期",
+        //                "F单位","F规格","F商品","F包装","F箱数","F零头","F税额","F售价"
+        //                }, dt);
+        //            }
+        //            else
+        //            {
+        //                common.ChkColumnsName(new string[] {
+        //                "单据编号", "日期","发货仓库","销售单价","购货单位代码","订单号","基本单位实发数量",
+        //                "产品长代码","实发数量","销售单价", "销售金额","批号","单位"
+        //                }, dt);
+        //            }
+        //        }
+        //    }
+        //}
+
 
         ///// <summary>
         ///// 
@@ -610,5 +721,22 @@ namespace Ferrero
         //}
 
         #endregion
+
+        private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            var dgv = (DataGridView)sender;
+            if (dgv.RowHeadersVisible)
+            {
+                Rectangle rect = new Rectangle(e.RowBounds.Left, e.RowBounds.Top,
+                               dgv.RowHeadersWidth, e.RowBounds.Height);
+                rect.Inflate(-2, -2);
+                TextRenderer.DrawText(e.Graphics,
+                (e.RowIndex + 1).ToString(),
+                e.InheritedRowStyle.Font,
+                rect, e.InheritedRowStyle.ForeColor,
+                TextFormatFlags.Right | TextFormatFlags.VerticalCenter
+                );
+            }
+        }
     }
 }

@@ -19,10 +19,10 @@ namespace Ferrero.DAL
         /// <summary>
         /// 获得数据列表
         /// </summary>
-        public int UserLogin(string sConnectionName, string userName, string password)
+        public int UserLogin(string sConnectionString, string userName, string password)
         {
             ///PassService pass = new PassService();
-            if (!string.IsNullOrEmpty(sConnectionName))
+            if (!string.IsNullOrEmpty(sConnectionString))
             {
                 //string connectionString = EncryptHelper.Decrypt("77052300",ConfigurationManager.ConnectionStrings[connectionName].ConnectionString);
                 StringBuilder strSql = new StringBuilder();
@@ -37,8 +37,7 @@ namespace Ferrero.DAL
 				};
                 parameters[0].Value = userName;
                 //parameters[1].Value = password;
-                string AccountConnectionString = SqlHelper.GetConnectionString(sConnectionName);
-                object obj = SqlHelper.GetSingle(AccountConnectionString, strSql.ToString(), parameters);
+                object obj = SqlHelper.GetSingle(sConnectionString, strSql.ToString(), parameters);
                 return obj != null ? int.Parse(obj.ToString()) : 0;
             }
             else

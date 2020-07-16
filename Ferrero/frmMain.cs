@@ -7,22 +7,48 @@ using System.Text;
 using System.Windows.Forms;
 
 using DevComponents.DotNetBar;
+using Ray.Framework.DBUtility;
 
 namespace Ferrero
 {
-    public partial class frmMain : Office2007Form 
+    public partial class frmMain : Office2007Form
     {
+        #region 公共属性
+        //用户名
         public string userName = "";
+        #endregion
+
+        #region 私有属性
+        //连接名称前缀
+        private static readonly string ConnectionNameProfix = "Ferrero.Dev.";
+        
+        //用户认证连接信息
+        private static readonly string AccountConnectionString = SqlHelper.GetConnectionString(ConnectionNameProfix + "Account");
+        
+        //武汉分公司连接信息
+        private static readonly string WhConnecitonString = ConnectionNameProfix + "";
+
+        //宜昌分公司连接信息
+        private static readonly string YcConnectionString = ConnectionNameProfix + "";
+        
+        //襄阳分公司连接信息
+        private static readonly string XyConnectionString = ConnectionNameProfix + "";
+
+        //荆州分公司连接信息
+        private static readonly string JzConnectionString = ConnectionNameProfix + "";
+
+        #endregion
 
         public frmMain()
         {
             InitializeComponent();
         }
 
-        frmLogin login = new frmLogin();
+
         
         private void frmMain_Load(object sender, EventArgs e)
         {
+            frmLogin login = new frmLogin(AccountConnectionString);
             login.StartPosition = FormStartPosition.CenterParent;
             if (login.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -37,7 +63,11 @@ namespace Ferrero
 
         private void AdvTree1_NodeClick(object sender, DevComponents.AdvTree.TreeNodeMouseEventArgs e)
         {
-            string title = AdvTree1.SelectedNode.Text + "_" + AdvTree1.SelectedNode.Parent.Text;
+            string title = "";
+            if (AdvTree1.SelectedNode.Parent != null)
+            {
+                title = AdvTree1.SelectedNode.Text + "_" + AdvTree1.SelectedNode.Parent.Text;
+            }
             if(TabIsOpen(title) == true) //过滤掉重复项目
             {
                 MessageBox.Show("窗口 \"" + title + "\" 已经打开！", "系统提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -47,11 +77,11 @@ namespace Ferrero
                 switch  (AdvTree1.SelectedNode.Name.Trim().ToLower())
                 {
                     case "node1":
-                        AddTab("导入外购入库单_武汉分公司", new Form1(userName,"Wuhan"));
+                        AddTab("导入外购入库单_武汉分公司", new Form1(userName,"Wuhan",WhConnecitonString));
                         break;
 
                     case "node2":
-                        AddTab("导入销售出库单_武汉分公司", new Form2(userName, "Wuhan"));
+                        AddTab("导入销售出库单_武汉分公司", new Form2(userName, "Wuhan", WhConnecitonString));
                         break;
 
                     case "node3":
@@ -59,11 +89,11 @@ namespace Ferrero
                         break;
 
                     case "node6":
-                        AddTab("导入外购入库单_宜昌分公司", new Form1(userName,"Yichang"));
+                        AddTab("导入外购入库单_宜昌分公司", new Form1(userName,"Yichang",YcConnectionString));
                         break;
 
                     case "node7":
-                        AddTab("导入销售出库单_宜昌分公司", new Form2(userName,"Yichang"));
+                        AddTab("导入销售出库单_宜昌分公司", new Form2(userName,"Yichang", YcConnectionString));
                         break;
 
                     case "node8":
@@ -71,11 +101,11 @@ namespace Ferrero
                         break;
 
                     case "node10":
-                        AddTab("导入外购入库单_襄樊分公司", new Form1(userName,"Xiangfan"));
+                        AddTab("导入外购入库单_襄樊分公司", new Form1(userName,"Xiangfan",XyConnectionString));
                         break;
 
                     case "node11":
-                        AddTab("导入销售出库单_襄樊分公司", new Form2(userName,"Xiangfan"));
+                        AddTab("导入销售出库单_襄樊分公司", new Form2(userName,"Xiangfan", XyConnectionString));
                         break;
 
                     case "node12":
@@ -83,11 +113,11 @@ namespace Ferrero
                         break;
 
                     case "node14":
-                        AddTab("导入外购入库单_沙市分公司", new Form1(userName, "jingzhou"));
+                        AddTab("导入外购入库单_沙市分公司", new Form1(userName, "Jingzhou",JzConnectionString));
                         break;
 
                     case "node15":
-                        AddTab("导入销售出库单_沙市分公司", new Form2(userName, "jingzhou"));
+                        AddTab("导入销售出库单_沙市分公司", new Form2(userName, "Jingzhou", JzConnectionString));
                         break;
 
                     case "node16":

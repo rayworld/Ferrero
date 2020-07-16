@@ -12,10 +12,11 @@ using Ray.Framework.Encrypt;
 
 namespace Ferrero
 {
-    public partial class frmLogin : Office2007Form 
+    public partial class frmLogin : Office2007Form
     {
-        public frmLogin()
+        public frmLogin(string connectionString)
         {
+            this.sConnectionString = connectionString;
             InitializeComponent();
         }
 
@@ -30,6 +31,11 @@ namespace Ferrero
             get { return textBox2.Text; }
             set { textBox2.Text = value; }
         }
+
+        /// <summary>
+        /// 连接信息
+        /// </summary>
+        public string sConnectionString {get;set;}
 
         private void frmLogin_Load(object sender, EventArgs e)
         {
@@ -48,7 +54,7 @@ namespace Ferrero
             AccountService bAccountService = new AccountService();
             //PassService bPassService = new PassService();
             //if (bAccountService.UserLogin("Account", UserName, bPassService.EncryptPassword(Password, 12)))
-            if (bAccountService.UserLogin("Account", UserName,PassService.EncryptPassword(Password, 12)))
+            if (bAccountService.UserLogin(sConnectionString, UserName,PassService.EncryptPassword(Password, 12)))
             //if (1 == 1)
             {
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
